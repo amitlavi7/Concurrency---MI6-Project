@@ -25,7 +25,9 @@ public class InventoryTest {
         assertNotNull(inv);
         inv.load(gadgets);
         assertTrue(inv.getItem("sky hook"));
+        assertTrue(inv.getItem("space knife"));
         assertFalse(inv.getItem("sword"));
+        assertFalse(inv.getItem("space lighter"));
     }
 
 }
