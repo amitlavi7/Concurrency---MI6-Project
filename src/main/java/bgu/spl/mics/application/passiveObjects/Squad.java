@@ -1,4 +1,5 @@
 package bgu.spl.mics.application.passiveObjects;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -12,6 +13,10 @@ import java.util.Map;
 public class Squad {
 
 	private Map<String, Agent> agents;
+
+	private Squad(){
+		agents = new HashMap<String, Agent>();
+	}
 
 	/**
 	 * Retrieves the single instance of this class.

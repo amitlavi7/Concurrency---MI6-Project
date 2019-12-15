@@ -5,14 +5,12 @@ import bgu.spl.mics.example.messages.ExampleEvent;
 import bgu.spl.mics.example.publishers.ExampleMessageSender;
 import bgu.spl.mics.example.subscribers.ExampleBroadcastSubscriber;
 import bgu.spl.mics.example.subscribers.ExampleEventHandlerSubscriber;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-
-import bgu.spl.mics.application.subscribers.M;
 import bgu.spl.mics.application.subscribers.Q;
 import bgu.spl.mics.application.subscribers.Moneypenny;
+import bgu.spl.mics.application.subscribers.M;
 import bgu.spl.mics.application.publishers.Intelligence;
-
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class MessageBrokerTest {
