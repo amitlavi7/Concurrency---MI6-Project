@@ -1,7 +1,5 @@
 package bgu.spl.mics.application.passiveObjects;
 
-import bgu.spl.mics.application.publishers.Intelligence;
-
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;

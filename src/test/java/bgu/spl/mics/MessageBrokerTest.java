@@ -8,7 +8,7 @@ import bgu.spl.mics.example.subscribers.ExampleEventHandlerSubscriber;
 import bgu.spl.mics.application.subscribers.Q;
 import bgu.spl.mics.application.subscribers.Moneypenny;
 import bgu.spl.mics.application.subscribers.M;
-import bgu.spl.mics.application.publishers.Intelligence;
+import bgu.spl.mics.application.subscribers.Intelligence;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
@@ -36,7 +36,7 @@ public class MessageBrokerTest {
         Subscriber q = new Q();
         Subscriber m = new M();
         Subscriber moneypenny = new Moneypenny();
-        Publisher intel = new Intelligence();
+        Subscriber intel = new Intelligence();
         assertNotNull(broker);
         broker.register(q);
         broker.register(m);
