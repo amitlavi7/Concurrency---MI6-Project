@@ -32,6 +32,7 @@ public class MessageBrokerTest {
 
     @Test
     public void test(){
+        //fuck you
         Subscriber q = new Q();
         Subscriber m = new M();
         Subscriber moneypenny = new Moneypenny();
