@@ -1,4 +1,5 @@
 package bgu.spl.mics.application.passiveObjects;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
@@ -34,7 +35,10 @@ public class Squad {
 	 * Releases agents.
 	 */
 	public void releaseAgents(List<String> serials){
-		// TODO Implement this
+		for (String serial: serials){
+			if (agents.containsKey(serial))
+				agents.get(serial).release();
+		}
 	}
 
 	/**
@@ -42,7 +46,21 @@ public class Squad {
 	 * @param time   milliseconds to sleep
 	 */
 	public void sendAgents(List<String> serials, int time){
-		// TODO Implement this
+		for(String serial : serials){
+			agents.get(serial).acquire();
+		}
+		try{
+			Thread.sleep(time);
+		}
+		catch(Exception e) {
+
+		}
+		for (String serial: serials){
+			if (agents.containsKey(serial))
+				agents.get(serial).release();
+		}
+
+
 	}
 
 	/**
@@ -51,8 +69,11 @@ public class Squad {
 	 * @return ‘false’ if an agent of serialNumber ‘serial’ is missing, and ‘true’ otherwise
 	 */
 	public boolean getAgents(List<String> serials){
-		// TODO Implement this
-		return false;
+		for (String serial: serials){
+			if (!agents.containsKey(serial))
+				return false;
+		}
+		return true;
 	}
 
     /**
@@ -61,8 +82,12 @@ public class Squad {
      * @return a list of the names of the agents with the specified serials.
      */
     public List<String> getAgentsNames(List<String> serials){
-        // TODO Implement this
-	    return null;
+    	List<String> nameList = new LinkedList<>();
+		for (String serial: serials){
+			if (agents.containsKey(serial))
+				nameList.add(agents.get(serial).getName());
+		}
+		return nameList;
     }
 
 }
