@@ -33,7 +33,9 @@ public class Squad {
 	 * 						of the squad.
 	 */
 	public void load (Agent[] agents) {
-		// TODO Implement this
+		for (Agent agent : agents) {
+			this.agents.put(agent.getName(), agent);
+		}
 	}
 
 	/**
