@@ -1,11 +1,17 @@
 package bgu.spl.mics;
 
+//import java.util.concurrent.BlockingQueue;
+//import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.*;
+
 /**
  * The {@link MessageBrokerImpl class is the implementation of the MessageBroker interface.
  * Write your implementation here!
  * Only private fields and methods can be added to this class.
  */
 public class MessageBrokerImpl implements MessageBroker {
+
+	private ConcurrentHashMap<Subscriber, BlockingQueue <Message>> subscribersQueues = new ConcurrentHashMap <>();
 
 	/**
 	 * Retrieves the single instance of this class.
