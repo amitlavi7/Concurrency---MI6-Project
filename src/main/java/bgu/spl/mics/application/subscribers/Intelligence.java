@@ -2,6 +2,10 @@ package bgu.spl.mics.application.subscribers;
 
 //import bgu.spl.mics.Publisher;
 import bgu.spl.mics.Subscriber;
+import bgu.spl.mics.application.passiveObjects.MissionInfo;
+import bgu.spl.mics.application.passiveObjects.MissionInfo;
+
+import java.util.List;
 
 /**
  * A Publisher|Subscriber.
@@ -11,6 +15,9 @@ import bgu.spl.mics.Subscriber;
  * You MAY change constructor signatures and even add new public constructors.
  */
 public class Intelligence extends Subscriber {
+	private List<MissionInfo> missions;
+
+
 
 	public Intelligence() {
 		super("Change_This_Name");

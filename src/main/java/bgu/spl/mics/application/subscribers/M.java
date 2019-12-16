@@ -1,5 +1,6 @@
 package bgu.spl.mics.application.subscribers;
 
+import bgu.spl.mics.Callback;
 import bgu.spl.mics.Subscriber;
 
 /**
@@ -12,13 +13,12 @@ public class M extends Subscriber {
 
 	public M() {
 		super("Change_This_Name");
-		// TODO Implement this
+//		subscribeEvent(MissionReceivedEvent, Callback.call(m));
 	}
 
 	@Override
 	protected void initialize() {
-		// TODO Implement this
-		
+
 	}
 
 }
