@@ -2,6 +2,7 @@ package bgu.spl.mics.application;
 
 import bgu.spl.mics.application.passiveObjects.Agent;
 import bgu.spl.mics.application.passiveObjects.Inventory;
+import bgu.spl.mics.application.passiveObjects.MissionInfo;
 import bgu.spl.mics.application.passiveObjects.Squad;
 import com.google.gson.*;
 import jdk.nashorn.internal.parser.JSONParser;
@@ -25,8 +26,9 @@ public class MI6Runner {
         ////// check if Ok///////////
         Gson gson = new Gson();
         JsonObject obj = (JsonObject) new JsonParser().parse(new FileReader(args[0]));
-        JsonArray inventory = (JsonArray) obj.get("inventory");
-        JsonArray squad = (JsonArray) obj.get("squad");
+        JsonArray inventory = obj.getAsJsonArray("inventory");
+        JsonArray squad =  obj.getAsJsonArray("squad");
+        JsonArray intelligence = obj.getAsJsonObject("services").getAsJsonArray("intelligence");
         loadInventory(inventory);
         loadSquad(squad);
     }
@@ -49,5 +51,11 @@ public class MI6Runner {
             AgentsToLoad[i] = agent;
         }
         s.load(AgentsToLoad);
+    }
+
+    private static void loadMissonsToIntelligence(JsonArray intelligence){
+        MissionInfo info = new MissionInfo();
+
+
     }
 }
