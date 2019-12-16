@@ -16,7 +16,7 @@ public class InventoryTest {
 
     @BeforeEach
     public void setUp() {
-        inv = new Inventory();
+        inv = Inventory.getInstance();
         gadgets = new String[]{"sky hook", "space knife", "camera pen", "poisoned shoes"};
     }
 

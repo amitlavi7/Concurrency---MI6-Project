@@ -13,6 +13,7 @@ import java.util.List;
  * You can add ONLY private fields and methods to this class as you see fit.
  */
 public class Inventory {
+	private static Inventory instance = null;
 	private List<String> gadgets;
 
 	private Inventory() {
@@ -22,8 +23,9 @@ public class Inventory {
      * Retrieves the single instance of this class.
      */
 	public static Inventory getInstance() {
-		//TODO: Implement this
-		return null;
+		if (instance == null)
+			instance = new Inventory();
+		return instance;
 	}
 
 	/**

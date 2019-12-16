@@ -18,7 +18,7 @@ public class SquadTest {
 
     @BeforeEach
     public void setUp(){
-        agents = new Squad();
+        agents = Squad.getInstance();
         Agent agent1 = new Agent();
         Agent agent2 = new Agent();
         Agent agent3 = new Agent();
