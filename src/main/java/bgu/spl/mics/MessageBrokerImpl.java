@@ -11,7 +11,10 @@ import java.util.concurrent.*;
  */
 public class MessageBrokerImpl implements MessageBroker {
 
-	private ConcurrentHashMap<Subscriber, BlockingQueue <Message>> subscribersQueues = new ConcurrentHashMap <>();
+	private ConcurrentHashMap<Subscriber, LinkedBlockingQueue <Message>> subscribersMissionQueues = new ConcurrentHashMap <>();
+	private ConcurrentHashMap<Subscriber, LinkedBlockingQueue <Message>> subscribersTopicQueues = new ConcurrentHashMap <>();
+	private ConcurrentHashMap<Class<? extends Event>, LinkedBlockingQueue<Subscriber>> eventHandlerQueues = new ConcurrentHashMap<>();
+	private ConcurrentHashMap<Class<? extends Broadcast>, LinkedBlockingQueue<Subscriber>> broadcastQueue = new ConcurrentHashMap<>();
 
 	/**
 	 * Retrieves the single instance of this class.
@@ -54,13 +57,25 @@ public class MessageBrokerImpl implements MessageBroker {
 
 	@Override
 	public void register(Subscriber m) {
-		// TODO Auto-generated method stub
-
+		subscribersMissionQueues.putIfAbsent(m, new LinkedBlockingQueue<>());
+		subscribersTopicQueues.putIfAbsent(m, new LinkedBlockingQueue<>());
 	}
 
 	@Override
 	public void unregister(Subscriber m) {
-		// TODO Auto-generated method stub
+		LinkedBlockingQueue <Message> temp = subscribersTopicQueues.get(m);
+		subscribersMissionQueues.remove(m);
+		subscribersTopicQueues.remove(m);
+		while(!temp.isEmpty()){
+			Object mes = temp.poll();
+			if(mes instanceof Broadcast){
+				broadcastQueue.get(mes).remove(m);
+			}
+			else{
+				eventHandlerQueues.get(mes).remove(m);
+			}
+
+		}
 
 	}
 
