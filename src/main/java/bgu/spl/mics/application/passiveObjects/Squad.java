@@ -13,7 +13,9 @@ import java.util.Map;
 public class Squad {
 
 	private Map<String, Agent> agents;
-	private static Squad instance = null;
+	private static  class SquadHolder {
+		private static Squad instance = new Squad();
+	}
 
 	private Squad(){
 		agents = new HashMap<String, Agent>();
@@ -23,9 +25,7 @@ public class Squad {
 	 * Retrieves the single instance of this class.
 	 */
 	public static Squad getInstance() {
-		if (instance == null)
-			instance = new Squad();
-		return instance;
+		return SquadHolder.instance;
 	}
 
 	/**

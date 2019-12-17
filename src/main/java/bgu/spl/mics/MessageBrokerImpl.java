@@ -1,7 +1,6 @@
 package bgu.spl.mics;
+package com.mkyong.concurrency.queue.simple.raw;
 
-//import java.util.concurrent.BlockingQueue;
-//import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.*;
 
 /**

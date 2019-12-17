@@ -23,7 +23,7 @@ public class MI6Runner {
             System.out.println("Invalid args size");
             return;
         }
-        ////// check if Ok///////////
+        //TODO change the json reader
         Gson gson = new Gson();
         JsonObject obj = (JsonObject) new JsonParser().parse(new FileReader(args[0]));
         JsonArray inventory = obj.getAsJsonArray("inventory");
