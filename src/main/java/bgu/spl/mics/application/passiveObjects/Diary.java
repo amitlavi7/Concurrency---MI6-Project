@@ -14,18 +14,19 @@ import java.util.List;
 public class Diary {
 	private List<Report> reports;
 	private int total;
-	private static Diary instance = null;
+	private static class DiaryHolder {
+		private static Diary instance = new Diary();
+	}
 
 	private Diary(){
 		reports = new LinkedList<>();
+		total = 0;
 	}
 	/**
 	 * Retrieves the single instance of this class.
 	 */
 	public static Diary getInstance() {
-		if (instance == null)
-			instance = new Diary();
-		return instance;
+		return DiaryHolder.instance;
 	}
 
 	public List<Report> getReports() {
@@ -65,4 +66,5 @@ public class Diary {
 	public void incrementTotal(){
 		total++;
 	}
+
 }
