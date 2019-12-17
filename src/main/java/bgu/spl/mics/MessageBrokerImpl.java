@@ -13,24 +13,36 @@ public class MessageBrokerImpl implements MessageBroker {
 	private ConcurrentHashMap<Subscriber, LinkedBlockingQueue <Message>> subscribersTopicQueues = new ConcurrentHashMap <>();
 	private ConcurrentHashMap<Class<? extends Event>, LinkedBlockingQueue<Subscriber>> eventHandlerQueues = new ConcurrentHashMap<>();
 	private ConcurrentHashMap<Class<? extends Broadcast>, LinkedBlockingQueue<Subscriber>> broadcastQueue = new ConcurrentHashMap<>();
-
+	private static class MessageBrokerHolder {
+		private static MessageBroker instance = new MessageBrokerImpl();
+	}
 	/**
 	 * Retrieves the single instance of this class.
 	 */
 	public static MessageBroker getInstance() {
-		//TODO: Implement this
-		return null;
+		return MessageBrokerHolder.instance;
 	}
 
 	@Override
 	public <T> void subscribeEvent(Class<? extends Event<T>> type, Subscriber m) {
-		// TODO Auto-generated method stub
+		eventHandlerQueues.putIfAbsent(type, new LinkedBlockingQueue<>());
+		//subscribersTopicQueues.get(m).add(type);
 
+//		if(!eventHandlerQueues.contains(type)){
+//			LinkedBlockingQueue<Subscriber> toPush = new LinkedBlockingQueue<Subscriber>();
+//			eventHandlerQueues.putIfAbsent(type, toPush);
+//		}
+//		else{
+//			synchronized (eventHandlerQueues.get(type)){
+//				eventHandlerQueues.get(type).add(m);
+//			}
+//		}
 	}
 
 	@Override
 	public void subscribeBroadcast(Class<? extends Broadcast> type, Subscriber m) {
-		// TODO Auto-generated method stub
+			broadcastQueue.putIfAbsent(type, new LinkedBlockingQueue<>());
+			//subscribersTopicQueues.get(m).add(type);
 
 	}
 
@@ -79,7 +91,14 @@ public class MessageBrokerImpl implements MessageBroker {
 
 	@Override
 	public Message awaitMessage(Subscriber m) throws InterruptedException {
-		// TODO Auto-generated method stub
+//		if(!subscribersMissionQueues.contains(m)){
+//			throw new IllegalStateException("The subscriber was never register");
+//		}
+//		try {
+//				return subscribersMissionQueues.get(m).poll();
+//		}catch (InterruptedException exception){
+//				return null;
+//		}
 		return null;
 	}
 

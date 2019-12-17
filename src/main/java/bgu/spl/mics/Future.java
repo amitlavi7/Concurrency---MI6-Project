@@ -11,12 +11,16 @@ import java.util.concurrent.TimeUnit;
  * No public constructor is allowed except for the empty constructor.
  */
 public class Future<T> {
+
+	private volatile boolean done;
+	private T value = null;
+
 	
 	/**
 	 * This should be the the only public constructor in this class.
 	 */
 	public Future() {
-		//TODO: implement this
+		done = false;
 	}
 	
 	/**
@@ -28,23 +32,36 @@ public class Future<T> {
      * 	       
      */
 	public T get() {
-		//TODO: implement this.
-		return null;
+		synchronized (this){
+			while (!isDone()){
+				try {
+					wait();
+				} catch (InterruptedException e){
+					System.out.println("The thread was interrupted");
+				}
+			}
+			return value;
+		}
 	}
 	
 	/**
      * Resolves the result of this Future object.
      */
 	public void resolve (T result) {
-		//TODO: implement this.
+		synchronized (this){
+			if (!isDone()) {
+				value = result;
+				done = true;
+				notifyAll();
+			}
+		}
 	}
 	
 	/**
      * @return true if this object has been resolved, false otherwise
      */
 	public boolean isDone() {
-		//TODO: implement this.
-		return false;
+		return done;
 	}
 	
 	/**
@@ -59,8 +76,18 @@ public class Future<T> {
      *         elapsed, return null.
      */
 	public T get(long timeout, TimeUnit unit) {
-		//TODO: implement this.
-		return null;
-	}
+		synchronized (this){
+			while (!isDone()){
+				try {
+					wait(unit.toSeconds(timeout));
+					return value;
+				} catch (InterruptedException e){
+					System.out.println("The thread was interrupted");
+				}
+			}
+			return value;
+		}
 
+	}
 }
+
