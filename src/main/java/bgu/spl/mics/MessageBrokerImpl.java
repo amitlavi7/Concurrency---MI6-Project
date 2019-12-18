@@ -9,8 +9,8 @@ import java.util.concurrent.*;
  */
 public class MessageBrokerImpl implements MessageBroker {
 
-	private ConcurrentHashMap<Subscriber, LinkedBlockingQueue <Message>> subscribersMissionQueues = new ConcurrentHashMap <>();
-	private ConcurrentHashMap<Subscriber, LinkedBlockingQueue <Message>> subscribersTopicQueues = new ConcurrentHashMap <>();
+	private ConcurrentHashMap<Subscriber, LinkedBlockingQueue <Class<? extends Message>>> subscribersMissionQueues = new ConcurrentHashMap <>();
+	private ConcurrentHashMap<Subscriber, LinkedBlockingQueue <Class<? extends Message>>> subscribersTopicQueues = new ConcurrentHashMap <>();
 	private ConcurrentHashMap<Class<? extends Event>, LinkedBlockingQueue<Subscriber>> eventHandlerQueues = new ConcurrentHashMap<>();
 	private ConcurrentHashMap<Class<? extends Broadcast>, LinkedBlockingQueue<Subscriber>> broadcastQueue = new ConcurrentHashMap<>();
 	private static class MessageBrokerHolder {
@@ -26,8 +26,9 @@ public class MessageBrokerImpl implements MessageBroker {
 	@Override
 	public <T> void subscribeEvent(Class<? extends Event<T>> type, Subscriber m) {
 		eventHandlerQueues.putIfAbsent(type, new LinkedBlockingQueue<>());
-		//subscribersTopicQueues.get(m).add(type);
-
+		eventHandlerQueues.get(type).add(m);
+		subscribersTopicQueues.get(m).add(type);
+		subscribersMissionQueues.get(m).add(type);
 //		if(!eventHandlerQueues.contains(type)){
 //			LinkedBlockingQueue<Subscriber> toPush = new LinkedBlockingQueue<Subscriber>();
 //			eventHandlerQueues.putIfAbsent(type, toPush);
@@ -42,7 +43,8 @@ public class MessageBrokerImpl implements MessageBroker {
 	@Override
 	public void subscribeBroadcast(Class<? extends Broadcast> type, Subscriber m) {
 			broadcastQueue.putIfAbsent(type, new LinkedBlockingQueue<>());
-			//subscribersTopicQueues.get(m).add(type);
+			broadcastQueue.get(type).add(m);
+			subscribersTopicQueues.get(m).add(type);
 
 	}
 
@@ -73,16 +75,16 @@ public class MessageBrokerImpl implements MessageBroker {
 
 	@Override
 	public void unregister(Subscriber m) {
-		LinkedBlockingQueue <Message> temp = subscribersTopicQueues.get(m);
+		LinkedBlockingQueue <Class<? extends Message>> temp = subscribersTopicQueues.get(m);
 		subscribersMissionQueues.remove(m);
 		subscribersTopicQueues.remove(m);
 		while(!temp.isEmpty()){
-			Object mes = temp.poll();
-			if(mes instanceof Broadcast){
-				broadcastQueue.get(mes).remove(m);
+			Class mes = temp.poll();
+			if(Event.class.isAssignableFrom(mes)){
+				eventHandlerQueues.get(mes).remove(m);
 			}
 			else{
-				eventHandlerQueues.get(mes).remove(m);
+				broadcastQueue.get(mes).remove(m);
 			}
 
 		}
