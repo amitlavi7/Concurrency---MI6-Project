@@ -5,7 +5,6 @@ import bgu.spl.mics.application.passiveObjects.Inventory;
 import bgu.spl.mics.application.passiveObjects.MissionInfo;
 import bgu.spl.mics.application.passiveObjects.Squad;
 import com.google.gson.*;
-import jdk.nashorn.internal.parser.JSONParser;
 
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
