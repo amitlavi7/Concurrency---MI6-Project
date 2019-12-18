@@ -1,4 +1,5 @@
 package bgu.spl.mics;
+import java.util.concurrent.*;
 
 /**
  * The Subscriber is an abstract class that any subscriber in the system
@@ -18,6 +19,7 @@ package bgu.spl.mics;
 public abstract class Subscriber extends RunnableSubPub {
     private boolean terminated = false;
     private MessageBroker messageBroker = MessageBrokerImpl.getInstance();
+    private ConcurrentHashMap <Class <? extends Message>, Callback> callbackMap;
 
     /**
      * @param name the Subscriber name (used mainly for debugging purposes -
@@ -25,6 +27,7 @@ public abstract class Subscriber extends RunnableSubPub {
      */
     public Subscriber(String name) {
         super(name);
+        callbackMap = new ConcurrentHashMap<>();
     }
 
     /**
@@ -50,6 +53,7 @@ public abstract class Subscriber extends RunnableSubPub {
      */
     protected final <T, E extends Event<T>> void subscribeEvent(Class<E> type, Callback<E> callback) {
         messageBroker.subscribeEvent(type, this);
+        callbackMap.putIfAbsent(type, callback);
     }
 
     /**
@@ -73,7 +77,8 @@ public abstract class Subscriber extends RunnableSubPub {
      *                 queue.
      */
     protected final <B extends Broadcast> void subscribeBroadcast(Class<B> type, Callback<B> callback) {
-        //TODO: implement this.
+        messageBroker.subscribeBroadcast(type, this);
+        callbackMap.putIfAbsent(type, callback);
     }
 
     /**
@@ -87,7 +92,7 @@ public abstract class Subscriber extends RunnableSubPub {
      *               {@code e}.
      */
     protected final <T> void complete(Event<T> e, T result) {
-        //TODO: implement this.
+        messageBroker.complete(e,result);
     }
 
     /**
@@ -96,6 +101,7 @@ public abstract class Subscriber extends RunnableSubPub {
      */
     protected final void terminate() {
         this.terminated = true;
+        messageBroker.unregister(this);
     }
 
     /**
@@ -105,9 +111,14 @@ public abstract class Subscriber extends RunnableSubPub {
     @Override
     public final void run() {
         initialize();
+        Message message;
         while (!terminated) {
-            System.out.println("NOT IMPLEMENTED!!!"); //TODO: you should delete this line :)
+            try {
+                message = messageBroker.awaitMessage(this);
+                callbackMap.get(message.getClass()).call(message);
+            } catch (InterruptedException e) {
+                System.out.println("The thread was interrupted! ");
+            }
         }
     }
-
 }
