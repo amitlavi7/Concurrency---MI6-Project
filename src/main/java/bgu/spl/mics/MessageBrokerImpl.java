@@ -14,7 +14,7 @@ public class MessageBrokerImpl implements MessageBroker {
 	private ConcurrentHashMap<Subscriber, LinkedBlockingQueue <Class<? extends Message>>> subscribersTopicQueues = new ConcurrentHashMap <>();
 	private ConcurrentHashMap<Class<? extends Event<?>>, LinkedBlockingQueue<Subscriber>> eventHandlerQueues = new ConcurrentHashMap<>();
 	private ConcurrentHashMap<Class<? extends Broadcast>, LinkedBlockingQueue<Subscriber>> broadcastQueue = new ConcurrentHashMap<>();
-	private ConcurrentHashMap<Event,Future> holdsFuture = new ConcurrentHashMap<>();
+	private ConcurrentHashMap<Event<?>,Future> holdsFuture = new ConcurrentHashMap<>();
 	private static class MessageBrokerHolder {
 		private static MessageBroker instance = new MessageBrokerImpl();
 	}
@@ -113,30 +113,23 @@ public class MessageBrokerImpl implements MessageBroker {
 
 	@Override
 	public Message awaitMessage(Subscriber m) throws InterruptedException {
-		if(subscribersMissionQueues.containsKey(m)){
-			Message toDo = subscribersMissionQueues.get(m).poll();
-			if(toDo != null){
-				return toDo;
-			}
-			else{
-				wait();
-			}
-		}
-		else
-
-
-
-//		if(!subscribersMissionQueues.contains(m)){
-//			throw new IllegalStateException("The subscriber was never register");
-//		}
-//		else {
-//			try {
-//				return subscribersMissionQueues.get(m).poll();
-//			} catch (InterruptedException exception) {
-//				return null;
+//		while(true) {
+//			if (subscribersMissionQueues.containsKey(m)) {
+//				Message toDo = subscribersMissionQueues.get(m).poll();
+//				if (toDo != null) {
+//					return toDo;
+//				} else {
+//					wait();
+//				}
 //			}
+//			else
 //		}
-		return null;
+		while (subscribersMissionQueues.get(m).isEmpty()){
+			wait();
+		}
+		return subscribersMissionQueues.get(m).poll();
+
+
 	}
 
 	
