@@ -12,7 +12,7 @@ public class MessageBrokerImpl implements MessageBroker {
 
 	private ConcurrentHashMap<Subscriber, LinkedBlockingQueue <Message>> subscribersMissionQueues = new ConcurrentHashMap <>();
 	private ConcurrentHashMap<Subscriber, LinkedBlockingQueue <Class<? extends Message>>> subscribersTopicQueues = new ConcurrentHashMap <>();
-	private ConcurrentHashMap<Class<? extends Event>, LinkedBlockingQueue<Subscriber>> eventHandlerQueues = new ConcurrentHashMap<>();
+	private ConcurrentHashMap<Class<? extends Event<?>>, LinkedBlockingQueue<Subscriber>> eventHandlerQueues = new ConcurrentHashMap<>();
 	private ConcurrentHashMap<Class<? extends Broadcast>, LinkedBlockingQueue<Subscriber>> broadcastQueue = new ConcurrentHashMap<>();
 	private ConcurrentHashMap<Event,Future> holdsFuture = new ConcurrentHashMap<>();
 	private static class MessageBrokerHolder {
@@ -46,19 +46,20 @@ public class MessageBrokerImpl implements MessageBroker {
 			broadcastQueue.putIfAbsent(type, new LinkedBlockingQueue<>());
 			broadcastQueue.get(type).add(m);
 			subscribersTopicQueues.get(m).add(type);
-
 	}
 
 	@Override
 	public <T> void complete(Event<T> e, T result) {
-		// TODO Auto-generated method stub
+		if(holdsFuture.containsKey(e)){
+			holdsFuture.get(e).resolve(result);
+		}
 
 	}
 
 	@Override
 	public void sendBroadcast(Broadcast b) {
-		if(broadcastQueue.contains(b)) {
-			LinkedBlockingQueue<Subscriber> temp = broadcastQueue.get(b);
+		if(broadcastQueue.containsKey(b.getClass())) {
+			LinkedBlockingQueue<Subscriber> temp = broadcastQueue.get(b.getClass());
 			while (!temp.isEmpty()) {
 				Subscriber sub = temp.poll();
 				subscribersMissionQueues.get(sub).add(b);
@@ -71,14 +72,14 @@ public class MessageBrokerImpl implements MessageBroker {
 	
 	@Override
 	public <T> Future<T> sendEvent(Event<T> e) {
-		if(eventHandlerQueues.contains(e) && !eventHandlerQueues.get(e).isEmpty()){
-			synchronized (eventHandlerQueues.get(e)) {
-				Subscriber subGetMission = eventHandlerQueues.get(e).poll();
-				eventHandlerQueues.get(e).add(subGetMission);
+		if(eventHandlerQueues.containsKey(e.getClass()) && !eventHandlerQueues.get(e.getClass()).isEmpty()){
+			synchronized (eventHandlerQueues.get(e.getClass())) {
+				Subscriber subGetMission = eventHandlerQueues.get(e.getClass()).poll();
+				eventHandlerQueues.get(e.getClass()).add(subGetMission);
 				subscribersMissionQueues.get(subGetMission).add(e);
-				Future <T> temp = new Future<>();
-				holdsFuture.putIfAbsent(e,temp);
-				return temp;
+				Future <T> future = new Future<>();
+				holdsFuture.putIfAbsent(e,future);
+				return future;
 			}
 		}
 
@@ -98,7 +99,7 @@ public class MessageBrokerImpl implements MessageBroker {
 		subscribersMissionQueues.remove(m);
 		subscribersTopicQueues.remove(m);
 		while(!temp.isEmpty()){
-			Class mes = temp.poll();
+			Class<?> mes = temp.poll();
 			if(Event.class.isAssignableFrom(mes)){
 				eventHandlerQueues.get(mes).remove(m);
 			}
@@ -112,6 +113,19 @@ public class MessageBrokerImpl implements MessageBroker {
 
 	@Override
 	public Message awaitMessage(Subscriber m) throws InterruptedException {
+		if(subscribersMissionQueues.containsKey(m)){
+			Message toDo = subscribersMissionQueues.get(m).poll();
+			if(toDo != null){
+				return toDo;
+			}
+			else{
+				wait();
+			}
+		}
+		else
+
+
+
 //		if(!subscribersMissionQueues.contains(m)){
 //			throw new IllegalStateException("The subscriber was never register");
 //		}
