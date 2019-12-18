@@ -2,6 +2,7 @@ package bgu.spl.mics;
 
 import java.util.concurrent.*;
 
+
 /**
  * The {@link MessageBrokerImpl class is the implementation of the MessageBroker interface.
  * Write your implementation here!
@@ -56,15 +57,29 @@ public class MessageBrokerImpl implements MessageBroker {
 
 	@Override
 	public void sendBroadcast(Broadcast b) {
-		// TODO Auto-generated method stub
+		LinkedBlockingQueue <Subscriber> temp = broadcastQueue.get(b);
+		while(!temp.isEmpty()){
+			Subscriber sub = temp.poll();
+			subscribersMissionQueues.get(sub).add(b.getClass());//need yo be checked
+
+		}
 
 	}
 
 	
 	@Override
 	public <T> Future<T> sendEvent(Event<T> e) {
-		// TODO Auto-generated method stub
-		return null;
+		if(eventHandlerQueues.contains(e) && !eventHandlerQueues.get(e).isEmpty()){
+			synchronized (eventHandlerQueues.get(e)) {
+				Subscriber subGetMission = eventHandlerQueues.get(e).poll();
+				eventHandlerQueues.get(e).add(subGetMission);
+				subscribersMissionQueues.get(subGetMission).add(e.getClass());
+			}
+
+		}
+
+			return null;
+
 	}
 
 	@Override
@@ -96,10 +111,12 @@ public class MessageBrokerImpl implements MessageBroker {
 //		if(!subscribersMissionQueues.contains(m)){
 //			throw new IllegalStateException("The subscriber was never register");
 //		}
-//		try {
+//		else {
+//			try {
 //				return subscribersMissionQueues.get(m).poll();
-//		}catch (InterruptedException exception){
+//			} catch (InterruptedException exception) {
 //				return null;
+//			}
 //		}
 		return null;
 	}
