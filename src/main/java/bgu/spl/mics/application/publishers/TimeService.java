@@ -1,7 +1,7 @@
 package bgu.spl.mics.application.publishers;
 
 import bgu.spl.mics.Publisher;
-import bgu.spl.mics.application.messages.TickBroadcast;
+//import bgu.spl.mics.application.messages.TickBroadcast;
 import java.util.Timer;
 import java.util.TimerTask;
 
