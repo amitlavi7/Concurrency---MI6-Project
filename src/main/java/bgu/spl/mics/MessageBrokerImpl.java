@@ -75,16 +75,16 @@ public class MessageBrokerImpl implements MessageBroker {
 		if(eventHandlerQueues.containsKey(e.getClass()) && !eventHandlerQueues.get(e.getClass()).isEmpty()){
 			synchronized (eventHandlerQueues.get(e.getClass())) {
 				Subscriber subGetMission = eventHandlerQueues.get(e.getClass()).poll();
-				eventHandlerQueues.get(e.getClass()).add(subGetMission);
-				subscribersMissionQueues.get(subGetMission).add(e);
-				Future <T> future = new Future<>();
-				holdsFuture.putIfAbsent(e,future);
-				return future;
+				if (subGetMission != null) {
+					eventHandlerQueues.get(e.getClass()).add(subGetMission);
+					subscribersMissionQueues.get(subGetMission).add(e);
+					Future<T> future = new Future<>();
+					holdsFuture.putIfAbsent(e, future);
+					return future;
+				}
 			}
 		}
-
 			return null;
-
 	}
 
 	@Override
