@@ -10,10 +10,11 @@ import java.util.concurrent.*;
  */
 public class MessageBrokerImpl implements MessageBroker {
 
-	private ConcurrentHashMap<Subscriber, LinkedBlockingQueue <Class<? extends Message>>> subscribersMissionQueues = new ConcurrentHashMap <>();
+	private ConcurrentHashMap<Subscriber, LinkedBlockingQueue <Message>> subscribersMissionQueues = new ConcurrentHashMap <>();
 	private ConcurrentHashMap<Subscriber, LinkedBlockingQueue <Class<? extends Message>>> subscribersTopicQueues = new ConcurrentHashMap <>();
 	private ConcurrentHashMap<Class<? extends Event>, LinkedBlockingQueue<Subscriber>> eventHandlerQueues = new ConcurrentHashMap<>();
 	private ConcurrentHashMap<Class<? extends Broadcast>, LinkedBlockingQueue<Subscriber>> broadcastQueue = new ConcurrentHashMap<>();
+	private ConcurrentHashMap<Event,Future> holdsFuture = new ConcurrentHashMap<>();
 	private static class MessageBrokerHolder {
 		private static MessageBroker instance = new MessageBrokerImpl();
 	}
@@ -29,7 +30,6 @@ public class MessageBrokerImpl implements MessageBroker {
 		eventHandlerQueues.putIfAbsent(type, new LinkedBlockingQueue<>());
 		eventHandlerQueues.get(type).add(m);
 		subscribersTopicQueues.get(m).add(type);
-		subscribersMissionQueues.get(m).add(type);
 //		if(!eventHandlerQueues.contains(type)){
 //			LinkedBlockingQueue<Subscriber> toPush = new LinkedBlockingQueue<Subscriber>();
 //			eventHandlerQueues.putIfAbsent(type, toPush);
@@ -57,11 +57,13 @@ public class MessageBrokerImpl implements MessageBroker {
 
 	@Override
 	public void sendBroadcast(Broadcast b) {
-		LinkedBlockingQueue <Subscriber> temp = broadcastQueue.get(b);
-		while(!temp.isEmpty()){
-			Subscriber sub = temp.poll();
-			subscribersMissionQueues.get(sub).add(b.getClass());//need yo be checked
+		if(broadcastQueue.contains(b)) {
+			LinkedBlockingQueue<Subscriber> temp = broadcastQueue.get(b);
+			while (!temp.isEmpty()) {
+				Subscriber sub = temp.poll();
+				subscribersMissionQueues.get(sub).add(b);
 
+			}
 		}
 
 	}
@@ -73,9 +75,11 @@ public class MessageBrokerImpl implements MessageBroker {
 			synchronized (eventHandlerQueues.get(e)) {
 				Subscriber subGetMission = eventHandlerQueues.get(e).poll();
 				eventHandlerQueues.get(e).add(subGetMission);
-				subscribersMissionQueues.get(subGetMission).add(e.getClass());
+				subscribersMissionQueues.get(subGetMission).add(e);
+				Future <T> temp = new Future<>();
+				holdsFuture.putIfAbsent(e,temp);
+				return temp;
 			}
-
 		}
 
 			return null;
