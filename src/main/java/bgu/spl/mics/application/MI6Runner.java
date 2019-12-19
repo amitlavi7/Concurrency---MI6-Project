@@ -4,6 +4,7 @@ import bgu.spl.mics.application.passiveObjects.Agent;
 import bgu.spl.mics.application.passiveObjects.Inventory;
 import bgu.spl.mics.application.passiveObjects.MissionInfo;
 import bgu.spl.mics.application.passiveObjects.Squad;
+import bgu.spl.mics.application.subscribers.M;
 import com.google.gson.*;
 
 import java.io.BufferedReader;
@@ -30,6 +31,8 @@ public class MI6Runner {
         JsonArray intelligence = obj.getAsJsonObject("services").getAsJsonArray("intelligence");
         loadInventory(inventory);
         loadSquad(squad);
+//        M m = new M();
+//        Thread t = new Thread(m);
     }
 
     private static void loadInventory(JsonArray inventory) {
