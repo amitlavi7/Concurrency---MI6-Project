@@ -5,7 +5,7 @@ import bgu.spl.mics.application.passiveObjects.Agent;
 
 import java.util.List;
 
-public class SendAgentsEvent implements Event {
+public class SendAgentsEvent implements Event <String> {
     private List<String> agentsToSend;
     private int durationForMission;
 
