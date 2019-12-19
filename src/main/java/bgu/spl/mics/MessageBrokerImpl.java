@@ -98,7 +98,7 @@ public class MessageBrokerImpl implements MessageBroker {
 
 	@Override
 	public void unregister(Subscriber m) {
-		LinkedBlockingQueue <Class<? extends Message>> temp = subscribersTopicQueues.get(m);
+		LinkedBlockingQueue <Class<? extends Message>> temp = new LinkedBlockingQueue<>(subscribersTopicQueues.get(m));
 		subscribersMissionQueues.remove(m);
 		subscribersTopicQueues.remove(m);
 		while(!temp.isEmpty()){
