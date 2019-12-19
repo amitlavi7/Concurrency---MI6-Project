@@ -19,6 +19,8 @@ public class M extends Subscriber {
 		super("M");
 	}
 
+
+
 	@Override
 	protected void initialize() {
 		subscribeEvent(MissionReceivedEvent.class, (MissionReceivedEvent event) -> {

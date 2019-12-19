@@ -25,11 +25,16 @@ public class Moneypenny extends Subscriber {
 	@Override
 	protected void initialize() {
 		subscribeEvent(AgentsAvailableEvent.class, event -> {
-			if (squad.getAgents(event.getAgentsNumbers())) {
+			if (!squad.getAgents(event.getAgentsNumbers())) {
+				try {
+					wait();
+				} catch (Exception ignored) {
+				}
+//				complete(event, "agentsAvailableFailed");
+			}
+			else {
 				complete(event, "agentsAvailableSucceed");
 			}
-			else
-				complete(event, "agentsAvailableFailed");
 		});
 	}
 }
