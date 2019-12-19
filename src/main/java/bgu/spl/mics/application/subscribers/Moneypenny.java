@@ -3,6 +3,7 @@ package bgu.spl.mics.application.subscribers;
 import bgu.spl.mics.Subscriber;
 import bgu.spl.mics.application.messages.AgentsAvailableEvent;
 import bgu.spl.mics.application.messages.GadgetAvailableEvent;
+import bgu.spl.mics.application.messages.SendAgentsEvent;
 import bgu.spl.mics.application.passiveObjects.Agent;
 import bgu.spl.mics.application.passiveObjects.Squad;
 
@@ -35,6 +36,11 @@ public class Moneypenny extends Subscriber {
 			else {
 				complete(event, "agentsAvailableSucceed");
 			}
+		});
+		subscribeEvent(SendAgentsEvent.class, event ->{
+			squad.sendAgents(event.getAgentsToSend(),event.getDurationForMission());
+			complete(event, "missionCompleted!");
+			squad.releaseAgents(event.getAgentsToSend());
 		});
 	}
 }

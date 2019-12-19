@@ -6,6 +6,7 @@ import bgu.spl.mics.Subscriber;
 import bgu.spl.mics.application.messages.AgentsAvailableEvent;
 import bgu.spl.mics.application.messages.GadgetAvailableEvent;
 import bgu.spl.mics.application.messages.MissionReceivedEvent;
+import bgu.spl.mics.application.messages.SendAgentsEvent;
 
 /**
  * M handles ReadyEvent - fills a report and sends agents to mission.
@@ -24,12 +25,14 @@ public class M extends Subscriber {
 	@Override
 	protected void initialize() {
 		subscribeEvent(MissionReceivedEvent.class, (MissionReceivedEvent event) -> {
-			System.out.println("M's MissionReceivedEvent callback");
-			Future agentsResolved = getSimplePublisher().sendEvent(new AgentsAvailableEvent(event.getAgentsNumbers()));
+			System.out.println("M's MissionReceivedEvent callback");//harta
+			Future agentsResolved = getSimplePublisher().sendEvent(new AgentsAvailableEvent(event.getMissionInfo().getSerialAgentsNumbers()));
 			if(agentsResolved.get() == "agentsSucceed") {
-				Future gadgetResolved = getSimplePublisher().sendEvent(new GadgetAvailableEvent(event.getGadget()));
+				Future gadgetResolved = getSimplePublisher().sendEvent(new GadgetAvailableEvent(event.getMissionInfo().getGadget()));
 				if (gadgetResolved.get() == "gadgetSucceed") {
-
+					//need to check time
+					//if statment for time
+						getSimplePublisher().sendEvent(new SendAgentsEvent(event.getMissionInfo().getSerialAgentsNumbers(),event.getMissionInfo().getDuration()));
 				}
 			}
 		});
