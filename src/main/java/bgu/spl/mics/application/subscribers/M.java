@@ -16,22 +16,20 @@ import bgu.spl.mics.application.messages.MissionReceivedEvent;
 public class M extends Subscriber {
 
 	public M() {
-		super("Change_This_Name");
-
+		super("M");
 	}
-
-
 
 	@Override
 	protected void initialize() {
 		subscribeEvent(MissionReceivedEvent.class, (MissionReceivedEvent event) -> {
 			System.out.println("M's MissionReceivedEvent callback");
-			Future agentsResolved = getSimplePublisher().sendEvent(new AgentsAvailableEvent(event.getAgentNumber()));
-			if(agentsResolved.get()!=null) {
-				getSimplePublisher().sendEvent(new GadgetAvailableEvent(event.getGadget()));
+			Future agentsResolved = getSimplePublisher().sendEvent(new AgentsAvailableEvent(event.getAgentsNumbers()));
+			if(agentsResolved.get() == "agentsSucceed") {
+				Future gadgetResolved = getSimplePublisher().sendEvent(new GadgetAvailableEvent(event.getGadget()));
+				if (gadgetResolved.get() == "gadgetSucceed") {
+
+				}
 			}
 		});
-
 	}
-
 }

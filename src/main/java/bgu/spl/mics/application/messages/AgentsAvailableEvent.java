@@ -2,14 +2,18 @@ package bgu.spl.mics.application.messages;
 
 import bgu.spl.mics.Event;
 
-//TODO all of this shit
+import java.util.List;
 
 public class AgentsAvailableEvent implements Event {
-    private String agentNumber;
+    private List<String> agentNumbers;
     private boolean isAvailable;
 
-    public AgentsAvailableEvent (String agentNumber) {
-        this.agentNumber = agentNumber;
+    public AgentsAvailableEvent (List<String> agentNumber) {
+        this.agentNumbers = agentNumber;
+    }
+
+    public List<String> getAgentsNumbers() {
+        return agentNumbers;
     }
 
     public void setAvailability(boolean isAvailable) {

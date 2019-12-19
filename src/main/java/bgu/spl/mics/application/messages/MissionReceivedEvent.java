@@ -2,15 +2,17 @@ package bgu.spl.mics.application.messages;
 
 import bgu.spl.mics.Event;
 
+import java.util.List;
+
 public class MissionReceivedEvent implements Event {
 
     private String missionName;
-    private String agentNumber;
+    private List<String> agentsNumbers;
     private String gadget;
 
-    public MissionReceivedEvent(String missionName, String agentNumber, String gadget) {
+    public MissionReceivedEvent(String missionName, List<String> agentsNumbers, String gadget) {
         this.missionName = missionName;
-        this.agentNumber = agentNumber;
+        this.agentsNumbers = agentsNumbers;
         this.gadget = gadget;
     }
 
@@ -18,8 +20,8 @@ public class MissionReceivedEvent implements Event {
         return missionName;
     }
 
-    public String getAgentNumber() {
-        return agentNumber;
+    public List<String> getAgentsNumbers() {
+        return agentsNumbers;
     }
 
     public String getGadget() {

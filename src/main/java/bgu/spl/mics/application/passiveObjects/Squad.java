@@ -78,9 +78,12 @@ public class Squad {
 	 * @return ‘false’ if an agent of serialNumber ‘serial’ is missing, and ‘true’ otherwise
 	 */
 	public boolean getAgents(List<String> serials){
-		for (String serial: serials){
-			if (!agents.containsKey(serial))
-				return false;
+		synchronized (this) {
+			for (String serial : serials) {
+				if (!agents.containsKey(serial) || !agents.get(serial).isAvailable())
+					return false;
+				agents.get(serial).acquire();
+			}
 		}
 		return true;
 	}

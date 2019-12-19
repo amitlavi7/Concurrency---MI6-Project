@@ -18,4 +18,6 @@ public class GadgetAvailableEvent implements Event {
     public boolean isAvailable() {
         return isAvailable;
     }
+
+    public String getGadget() {return gadget;}
 }
