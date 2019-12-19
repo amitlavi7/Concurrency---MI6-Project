@@ -5,7 +5,7 @@ import bgu.spl.mics.application.passiveObjects.MissionInfo;
 
 import java.util.List;
 
-public class MissionReceivedEvent implements Event {
+public class MissionReceivedEvent implements Event<String> {
 
     private MissionInfo missionInfo;
 

@@ -4,7 +4,7 @@ import bgu.spl.mics.Event;
 
 import java.util.List;
 
-public class AgentsAvailableEvent implements Event {
+public class AgentsAvailableEvent implements Event<String> {
     private List<String> agentNumbers;
     private boolean isAvailable;
 
