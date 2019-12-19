@@ -28,6 +28,7 @@ public abstract class Subscriber extends RunnableSubPub {
     public Subscriber(String name) {
         super(name);
         callbackMap = new ConcurrentHashMap<>();
+        messageBroker.register(this);
     }
 
     /**
@@ -111,14 +112,11 @@ public abstract class Subscriber extends RunnableSubPub {
     @Override
     public final void run() {
         initialize();
-        Message message;
         while (!terminated) {
             try {
-                message = messageBroker.awaitMessage(this);
+                Message message = messageBroker.awaitMessage(this);
                 callbackMap.get(message.getClass()).call(message);
-            } catch (InterruptedException e) {
-                System.out.println("The thread was interrupted! ");
-            }
+            } catch (Exception ignored) {}
         }
     }
 }

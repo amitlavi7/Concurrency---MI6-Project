@@ -87,7 +87,6 @@ public class Future<T> {
 			}
 			return value;
 		}
-
 	}
 }
 

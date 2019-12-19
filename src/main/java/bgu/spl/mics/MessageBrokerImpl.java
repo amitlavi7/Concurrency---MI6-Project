@@ -52,6 +52,7 @@ public class MessageBrokerImpl implements MessageBroker {
 	public <T> void complete(Event<T> e, T result) {
 		if(holdsFuture.containsKey(e)){
 			holdsFuture.get(e).resolve(result);
+			holdsFuture.remove(e);
 		}
 
 	}
@@ -59,11 +60,10 @@ public class MessageBrokerImpl implements MessageBroker {
 	@Override
 	public void sendBroadcast(Broadcast b) {
 		if(broadcastQueue.containsKey(b.getClass())) {
-			LinkedBlockingQueue<Subscriber> temp = broadcastQueue.get(b.getClass());
+			LinkedBlockingQueue<Subscriber> temp = new LinkedBlockingQueue<>(broadcastQueue.get(b.getClass()));
 			while (!temp.isEmpty()) {
 				Subscriber sub = temp.poll();
 				subscribersMissionQueues.get(sub).add(b);
-
 			}
 		}
 
@@ -75,12 +75,15 @@ public class MessageBrokerImpl implements MessageBroker {
 		if(eventHandlerQueues.containsKey(e.getClass()) && !eventHandlerQueues.get(e.getClass()).isEmpty()){
 			synchronized (eventHandlerQueues.get(e.getClass())) {
 				Subscriber subGetMission = eventHandlerQueues.get(e.getClass()).poll();
+				Future<T> future = new Future<>();
+				holdsFuture.putIfAbsent(e, future);
 				if (subGetMission != null) {
 					eventHandlerQueues.get(e.getClass()).add(subGetMission);
 					subscribersMissionQueues.get(subGetMission).add(e);
-					Future<T> future = new Future<>();
-					holdsFuture.putIfAbsent(e, future);
 					return future;
+				}
+				else {
+					future.resolve(null);
 				}
 			}
 		}
@@ -113,20 +116,6 @@ public class MessageBrokerImpl implements MessageBroker {
 
 	@Override
 	public Message awaitMessage(Subscriber m) throws InterruptedException {
-//		while(true) {
-//			if (subscribersMissionQueues.containsKey(m)) {
-//				Message toDo = subscribersMissionQueues.get(m).poll();
-//				if (toDo != null) {
-//					return toDo;
-//				} else {
-//					wait();
-//				}
-//			}
-//			else
-//		}
-		while (subscribersMissionQueues.get(m).isEmpty()){
-			wait();
-		}
 		return subscribersMissionQueues.get(m).poll();
 
 

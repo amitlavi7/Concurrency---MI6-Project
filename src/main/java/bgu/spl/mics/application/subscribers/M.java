@@ -12,7 +12,7 @@ import bgu.spl.mics.Subscriber;
 public class M extends Subscriber {
 
 	public M() {
-		super("Change_This_Name");
+		super("M");
 //		subscribeEvent(MissionReceivedEvent, Callback.call(m));
 	}
 
