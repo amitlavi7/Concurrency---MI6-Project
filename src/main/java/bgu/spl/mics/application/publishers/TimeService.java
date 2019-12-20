@@ -3,6 +3,8 @@ package bgu.spl.mics.application.publishers;
 import bgu.spl.mics.MessageBrokerImpl;
 import bgu.spl.mics.Publisher;
 import bgu.spl.mics.application.messages.TickBroadcast;
+import bgu.spl.mics.application.messages.TimeIsUp;
+
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -20,29 +22,35 @@ public class TimeService extends Publisher {
 
 	private int timeTicks;
 	private Timer timer;
+	private int currenttime;
 
 	public TimeService(int timeTicks) {
 		super("TimeService");
 		this.timeTicks = timeTicks;
 		timer = new Timer();
+		currenttime = 0;
 	}
 
 	@Override
 	protected void initialize() {
-		timer.schedule(new TimerTask() {
-			@Override
-			public void run() {
-				if (timeTicks > 0) {
-					MessageBrokerImpl.getInstance().sendBroadcast(new TickBroadcast(timeTicks));
-					timeTicks--;
-				}
-			}
-		}, 0, 100);
+		System.out.println("checks if time service has started");
 	}
 
 
 	@Override
 	public void run() {
-		initialize();
+		timer.schedule(new TimerTask() {
+			@Override
+			public void run() {
+				if (timeTicks > currenttime) {
+					MessageBrokerImpl.getInstance().sendBroadcast(new TickBroadcast(timeTicks));
+					currenttime++;
+				}
+				else{
+					timer.cancel();
+					MessageBrokerImpl.getInstance().sendBroadcast(new TimeIsUp());
+				}
+			}
+		}, 0, 100);
 	}
 }

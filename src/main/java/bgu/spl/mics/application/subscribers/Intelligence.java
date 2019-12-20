@@ -2,6 +2,7 @@ package bgu.spl.mics.application.subscribers;
 
 //import bgu.spl.mics.Publisher;
 import bgu.spl.mics.Subscriber;
+import bgu.spl.mics.application.messages.TickBroadcast;
 import bgu.spl.mics.application.passiveObjects.MissionInfo;
 import bgu.spl.mics.application.passiveObjects.MissionInfo;
 import com.google.gson.JsonArray;
@@ -45,7 +46,9 @@ public class Intelligence extends Subscriber {
 
 	@Override
 	protected void initialize() {
-		// TODO Implement this
+		subscribeBroadcast(TickBroadcast.class, event ->{
+
+		});
 	}
 
 	private LinkedList<String> jsonArrayToList (JsonArray array) {

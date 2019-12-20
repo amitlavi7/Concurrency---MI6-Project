@@ -13,8 +13,11 @@ import bgu.spl.mics.application.messages.*;
  */
 public class M extends Subscriber {
 
-	public M() {
+	private int id;
+
+	public M(int id) {
 		super("M");
+		this.id = id;
 	}
 
 

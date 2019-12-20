@@ -16,36 +16,39 @@ import bgu.spl.mics.application.passiveObjects.Squad;
  * You MAY change constructor signatures and even add new public constructors.
  */
 public class Moneypenny extends Subscriber {
-
+	private int id;
 	private Squad squad = Squad.getInstance();
 
-	public Moneypenny() {
+	public Moneypenny(int id) {
 		super("Moneypenny");
-
+		this.id = id;
 	}
 
 	@Override
 	protected void initialize() {
-		subscribeEvent(AgentsAvailableEvent.class, event -> {
-			if (!squad.getAgents(event.getAgentsNumbers())) {
-				try {
-					wait();
-				} catch (Exception ignored) {
-				}
+		if(id % 2 == 0) {
+			subscribeEvent(AgentsAvailableEvent.class, event -> {
+				if (!squad.getAgents(event.getAgentsNumbers())) {
+					try {
+						wait();
+					} catch (Exception ignored) {
+					}
 //				complete(event, "agentsAvailableFailed");
-			}
-			else {
-				complete(event, "agentsAvailableSucceed");
-			}
-		});
-		subscribeEvent(SendAgentsEvent.class, event ->{
-			squad.sendAgents(event.getAgentsToSend(),event.getDurationForMission());
-			complete(event, "missionCompleted!");
-			squad.releaseAgents(event.getAgentsToSend());
-		});
-		subscribeEvent(ReleaseAgentsEvent.class, event -> {
-			squad.releaseAgents(event.getAgentsNumbers());
-			complete(event, "mission Time is up!");
-		});
+				} else {
+					complete(event, "agentsAvailableSucceed");
+				}
+			});
+		}
+		else {
+			subscribeEvent(SendAgentsEvent.class, event -> {
+				squad.sendAgents(event.getAgentsToSend(), event.getDurationForMission());
+				complete(event, "missionCompleted!");
+				squad.releaseAgents(event.getAgentsToSend());
+			});
+			subscribeEvent(ReleaseAgentsEvent.class, event -> {
+				squad.releaseAgents(event.getAgentsNumbers());
+				complete(event, "mission Time is up!");
+			});
+		}
 	}
 }
