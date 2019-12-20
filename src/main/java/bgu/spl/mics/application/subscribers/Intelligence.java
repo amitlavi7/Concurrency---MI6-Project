@@ -2,7 +2,9 @@ package bgu.spl.mics.application.subscribers;
 
 //import bgu.spl.mics.Publisher;
 import bgu.spl.mics.Subscriber;
+import bgu.spl.mics.application.messages.MissionReceivedEvent;
 import bgu.spl.mics.application.messages.TickBroadcast;
+import bgu.spl.mics.application.messages.TimeIsUp;
 import bgu.spl.mics.application.passiveObjects.MissionInfo;
 import bgu.spl.mics.application.passiveObjects.MissionInfo;
 import com.google.gson.JsonArray;
@@ -21,7 +23,7 @@ import java.util.List;
  */
 public class Intelligence extends Subscriber {
 	private LinkedList<MissionInfo> missions;
-	private HashMap<Integer, MissionInfo> missionsHashMap;
+	private HashMap<Integer, LinkedList<MissionInfo>> missionsHashMap = new HashMap<>();
 	int number;
 
 
@@ -47,7 +49,14 @@ public class Intelligence extends Subscriber {
 	@Override
 	protected void initialize() {
 		subscribeBroadcast(TickBroadcast.class, event ->{
-
+			if(missionsHashMap.containsKey(event.getCurrentTick())){
+				for(MissionInfo mission : missionsHashMap.get(event.getCurrentTick())){
+					getSimplePublisher().sendEvent(new MissionReceivedEvent(mission));
+				}
+			}
+		});
+		subscribeBroadcast(TimeIsUp.class, event ->{
+			terminate();
 		});
 	}
 
@@ -61,7 +70,8 @@ public class Intelligence extends Subscriber {
 
 	private void listToHashMap (LinkedList<MissionInfo> list) {
 		for (MissionInfo mission : list ){
-			missionsHashMap.put(mission.getTimeIssued(), mission);
+			missionsHashMap.putIfAbsent(mission.getTimeIssued(), new LinkedList<MissionInfo>());
+			missionsHashMap.get(mission.getTimeIssued()).add(mission);
 		}
 	}
 

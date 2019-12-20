@@ -14,6 +14,7 @@ import bgu.spl.mics.application.messages.*;
 public class M extends Subscriber {
 
 	private int id;
+	private int time;
 
 	public M(int id) {
 		super("M");
@@ -37,6 +38,15 @@ public class M extends Subscriber {
 					getSimplePublisher().sendEvent(new ReleaseAgentsEvent(event.getMissionInfo().getSerialAgentsNumbers()));
 				}
 			}
+		});
+
+		subscribeBroadcast(TickBroadcast.class, event ->{
+			time = event.getCurrentTick();
+
+		});
+
+		subscribeBroadcast(TimeIsUp.class, event ->{
+			terminate();
 		});
 	}
 }

@@ -1,10 +1,7 @@
 package bgu.spl.mics.application.subscribers;
 
 import bgu.spl.mics.Subscriber;
-import bgu.spl.mics.application.messages.AgentsAvailableEvent;
-import bgu.spl.mics.application.messages.GadgetAvailableEvent;
-import bgu.spl.mics.application.messages.ReleaseAgentsEvent;
-import bgu.spl.mics.application.messages.SendAgentsEvent;
+import bgu.spl.mics.application.messages.*;
 import bgu.spl.mics.application.passiveObjects.Agent;
 import bgu.spl.mics.application.passiveObjects.Squad;
 
@@ -50,5 +47,8 @@ public class Moneypenny extends Subscriber {
 				complete(event, "mission Time is up!");
 			});
 		}
+		subscribeBroadcast(TimeIsUp.class, event ->{
+			terminate();
+		});
 	}
 }

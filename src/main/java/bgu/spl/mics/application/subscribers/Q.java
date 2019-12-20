@@ -3,6 +3,7 @@ package bgu.spl.mics.application.subscribers;
 import bgu.spl.mics.Subscriber;
 import bgu.spl.mics.application.messages.GadgetAvailableEvent;
 import bgu.spl.mics.application.messages.MissionReceivedEvent;
+import bgu.spl.mics.application.messages.TimeIsUp;
 import bgu.spl.mics.application.passiveObjects.Inventory;
 
 /**
@@ -26,6 +27,9 @@ public class Q extends Subscriber {
 				complete(event, "gadgetSucceed");
 			else
 				complete(event, "gadgetFailed");
+		});
+		subscribeBroadcast(TimeIsUp.class, event ->{
+			terminate();
 		});
 	}
 }
