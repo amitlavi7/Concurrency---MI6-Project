@@ -48,7 +48,9 @@ public class Intelligence extends Subscriber {
 
 	@Override
 	protected void initialize() {
+		System.out.println("intelligence initialized");
 		subscribeBroadcast(TickBroadcast.class, event ->{
+			System.out.println("intelligence TickBroadcast");
 			if(missionsHashMap.containsKey(event.getCurrentTick())){
 				for(MissionInfo mission : missionsHashMap.get(event.getCurrentTick())){
 					getSimplePublisher().sendEvent(new MissionReceivedEvent(mission));

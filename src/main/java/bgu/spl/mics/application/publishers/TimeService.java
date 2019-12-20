@@ -33,12 +33,13 @@ public class TimeService extends Publisher {
 
 	@Override
 	protected void initialize() {
-		System.out.println("checks if time service has started");
+		System.out.println("time service initialized");
 	}
 
 
 	@Override
 	public void run() {
+		initialize();
 		timer.schedule(new TimerTask() {
 			@Override
 			public void run() {

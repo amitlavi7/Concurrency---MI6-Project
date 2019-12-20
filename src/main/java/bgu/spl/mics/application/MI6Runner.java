@@ -2,7 +2,6 @@ package bgu.spl.mics.application;
 
 import bgu.spl.mics.application.passiveObjects.Agent;
 import bgu.spl.mics.application.passiveObjects.Inventory;
-import bgu.spl.mics.application.passiveObjects.MissionInfo;
 import bgu.spl.mics.application.passiveObjects.Squad;
 import bgu.spl.mics.application.subscribers.Intelligence;
 import bgu.spl.mics.application.subscribers.M;
@@ -29,7 +28,6 @@ public class MI6Runner {
             System.out.println("Invalid args size");
             return;
         }
-
         //Gson gson = new Gson();
         JsonObject obj = (JsonObject) new JsonParser().parse(new FileReader(args[0]));
         JsonArray inventory = obj.getAsJsonArray("inventory");

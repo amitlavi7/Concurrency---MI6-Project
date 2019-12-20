@@ -25,6 +25,7 @@ public class M extends Subscriber {
 
 	@Override
 	protected void initialize() {
+		System.out.println("M initialized");
 		subscribeEvent(MissionReceivedEvent.class, event -> {
 			System.out.println("M's MissionReceivedEvent callback");//harta
 			Future agentsResolved = getSimplePublisher().sendEvent(new AgentsAvailableEvent(event.getMissionInfo().getSerialAgentsNumbers()));

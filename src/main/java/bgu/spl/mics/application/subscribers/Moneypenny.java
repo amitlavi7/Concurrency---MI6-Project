@@ -23,8 +23,10 @@ public class Moneypenny extends Subscriber {
 
 	@Override
 	protected void initialize() {
+		System.out.println("Monneypenny initialized");
 		if(id % 2 == 0) {
 			subscribeEvent(AgentsAvailableEvent.class, event -> {
+				System.out.println("Monneypenny AgentsAvailableEvent");
 				if (!squad.getAgents(event.getAgentsNumbers())) {
 					try {
 						wait();
