@@ -27,12 +27,12 @@ public class MI6Runner {
             System.out.println("Invalid args size");
             return;
         }
-        //TODO change the json reader
-        Gson gson = new Gson();
+
+        //Gson gson = new Gson();
         JsonObject obj = (JsonObject) new JsonParser().parse(new FileReader(args[0]));
         JsonArray inventory = obj.getAsJsonArray("inventory");
         JsonArray squad =  obj.getAsJsonArray("squad");
-        JsonArray intelligence = obj.getAsJsonObject("services").getAsJsonArray("intelligence");
+//        JsonArray intelligence = obj.getAsJsonObject("services").getAsJsonArray("intelligence");
         JsonObject services = obj.getAsJsonObject("services");
         LinkedList<M> mList = new LinkedList<>();
         LinkedList<Moneypenny> moneypennies = new LinkedList<>();
@@ -40,7 +40,6 @@ public class MI6Runner {
         loadInventory(inventory);
         loadSquad(squad);
         loadServices(services, mList, moneypennies, intelligenceList);
-
     }
 
     private static void loadInventory(JsonArray inventory) {
@@ -73,14 +72,14 @@ public class MI6Runner {
             Intelligence intelligence = new Intelligence(i, missionsArray);
             intelligenceList.add(intelligence);
         }
-//        for (int i = 0; i < msNumber; i++) {
-//            M m = new M(i);
-//            mList.add(m);
-//        }
-//        for (int i = 0; i < moneypennyNumber; i++) {
-//            Moneypenny mp = new Moneypenny(i);
-//            moneypennies.add(mp);
-//        }
+        for (int i = 0; i < msNumber; i++) {
+            M m = new M(i);
+            mList.add(m);
+        }
+        for (int i = 0; i < moneypennyNumber; i++) {
+            Moneypenny mp = new Moneypenny(i);
+            moneypennies.add(mp);
+        }
     }
 
 }
