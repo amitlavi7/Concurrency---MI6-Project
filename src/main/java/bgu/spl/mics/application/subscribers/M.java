@@ -35,8 +35,8 @@ public class M extends Subscriber {
 					if(event.getMissionInfo().getTimeExpired()>time) {
 						getSimplePublisher().sendEvent(new SendAgentsEvent(event.getMissionInfo().getSerialAgentsNumbers(),event.getMissionInfo().getDuration()));
 						}
-					getSimplePublisher().sendEvent(new ReleaseAgentsEvent(event.getMissionInfo().getSerialAgentsNumbers()));
-				}
+					}
+				getSimplePublisher().sendEvent(new ReleaseAgentsEvent(event.getMissionInfo().getSerialAgentsNumbers()));
 			}
 		});
 

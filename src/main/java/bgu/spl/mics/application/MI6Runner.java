@@ -54,6 +54,10 @@ public class MI6Runner {
         threadsList.add(new Thread(timeService));
         for (Thread t : threadsList)
             t.start();
+//        Inventory inv = Inventory.getInstance();
+//        for(String gadget: inv.getItem()){
+//
+//        }
     }
 
     private static void loadInventory(JsonArray inventory) {
