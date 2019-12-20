@@ -4,12 +4,16 @@ import bgu.spl.mics.application.passiveObjects.Agent;
 import bgu.spl.mics.application.passiveObjects.Inventory;
 import bgu.spl.mics.application.passiveObjects.MissionInfo;
 import bgu.spl.mics.application.passiveObjects.Squad;
+import bgu.spl.mics.application.subscribers.Intelligence;
 import bgu.spl.mics.application.subscribers.M;
+import bgu.spl.mics.application.subscribers.Moneypenny;
 import com.google.gson.*;
 
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.util.LinkedList;
+import java.util.List;
 
 import com.google.gson.JsonObject;
 
@@ -29,10 +33,14 @@ public class MI6Runner {
         JsonArray inventory = obj.getAsJsonArray("inventory");
         JsonArray squad =  obj.getAsJsonArray("squad");
         JsonArray intelligence = obj.getAsJsonObject("services").getAsJsonArray("intelligence");
+        JsonObject services = obj.getAsJsonObject("services");
+        LinkedList<M> mList = new LinkedList<>();
+        LinkedList<Moneypenny> moneypennies = new LinkedList<>();
+        LinkedList<Intelligence> intelligenceList = new LinkedList<>();
         loadInventory(inventory);
         loadSquad(squad);
-//        M m = new M();
-//        Thread t = new Thread(m);
+        loadServices(services, mList, moneypennies, intelligenceList);
+
     }
 
     private static void loadInventory(JsonArray inventory) {
@@ -55,9 +63,24 @@ public class MI6Runner {
         s.load(AgentsToLoad);
     }
 
-    private static void loadMissonsToIntelligence(JsonArray intelligence){
-        MissionInfo info = new MissionInfo();
-
-
+    private static void loadServices(JsonObject services, LinkedList<M> mList, LinkedList<Moneypenny> moneypennies, LinkedList<Intelligence> intelligenceList){
+        int msNumber = services.get("M").getAsInt();
+        int moneypennyNumber = services.get("Moneypenny").getAsInt();
+        JsonArray missionsInfo = services.get("intelligence").getAsJsonArray();
+        for (int i = 0; i < missionsInfo.size(); i++){
+            JsonObject missionObject = missionsInfo.get(i).getAsJsonObject();
+            JsonArray missionsArray = missionObject.get("missions").getAsJsonArray();
+            Intelligence intelligence = new Intelligence(i, missionsArray);
+            intelligenceList.add(intelligence);
+        }
+//        for (int i = 0; i < msNumber; i++) {
+//            M m = new M(i);
+//            mList.add(m);
+//        }
+//        for (int i = 0; i < moneypennyNumber; i++) {
+//            Moneypenny mp = new Moneypenny(i);
+//            moneypennies.add(mp);
+//        }
     }
+
 }
