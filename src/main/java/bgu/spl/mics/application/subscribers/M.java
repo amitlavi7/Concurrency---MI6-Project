@@ -34,9 +34,19 @@ public class M extends Subscriber {
 				if (gadgetResolved.get() == "gadgetSucceed") {
 					if(event.getMissionInfo().getTimeExpired()>time) {
 						getSimplePublisher().sendEvent(new SendAgentsEvent(event.getMissionInfo().getSerialAgentsNumbers(),event.getMissionInfo().getDuration()));
+						complete(event,"missionSucceed");
 						}
+					else {
+						complete(event, "missionFailed");
 					}
+					}
+				else {
+					complete(event, "missionFailed");
+				}
 				getSimplePublisher().sendEvent(new ReleaseAgentsEvent(event.getMissionInfo().getSerialAgentsNumbers()));
+			}
+			else {
+				complete(event, "missionFailed");
 			}
 		});
 

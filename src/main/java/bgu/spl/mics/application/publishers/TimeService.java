@@ -44,7 +44,7 @@ public class TimeService extends Publisher {
 			@Override
 			public void run() {
 				if (timeTicks > currenttime) {
-					MessageBrokerImpl.getInstance().sendBroadcast(new TickBroadcast(timeTicks));
+					MessageBrokerImpl.getInstance().sendBroadcast(new TickBroadcast(currenttime));
 					currenttime++;
 				}
 				else{

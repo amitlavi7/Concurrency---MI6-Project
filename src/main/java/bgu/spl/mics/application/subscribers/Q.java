@@ -25,7 +25,6 @@ public class Q extends Subscriber {
 		System.out.println("Q initialized");
 		subscribeEvent(GadgetAvailableEvent.class, event -> {
 			System.out.println("Q GadgetAvailableEvent");
-			System.out.println("");
 			if (inventory.getItem(event.getGadget()))
 				complete(event, "gadgetSucceed");
 			else
