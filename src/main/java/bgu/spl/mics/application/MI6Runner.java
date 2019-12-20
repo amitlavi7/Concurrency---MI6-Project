@@ -6,7 +6,9 @@ import bgu.spl.mics.application.passiveObjects.MissionInfo;
 import bgu.spl.mics.application.passiveObjects.Squad;
 import bgu.spl.mics.application.subscribers.Intelligence;
 import bgu.spl.mics.application.subscribers.M;
+import bgu.spl.mics.application.subscribers.Q;
 import bgu.spl.mics.application.subscribers.Moneypenny;
+import bgu.spl.mics.application.publishers.TimeService;
 import com.google.gson.*;
 
 import java.io.BufferedReader;
@@ -40,6 +42,19 @@ public class MI6Runner {
         loadInventory(inventory);
         loadSquad(squad);
         loadServices(services, mList, moneypennies, intelligenceList);
+        List<Thread> threadsList = new LinkedList<>();
+        Q q = new Q ();
+        TimeService timeService = new TimeService(0);
+        for (M m : mList)
+            threadsList.add(new Thread(m));
+        for (Moneypenny moneypenny : moneypennies)
+            threadsList.add(new Thread(moneypenny));
+        for (Intelligence intelligence : intelligenceList)
+            threadsList.add(new Thread(intelligence));
+        threadsList.add(new Thread(q));
+        threadsList.add(new Thread(timeService));
+        for (Thread t : threadsList)
+            t.start();
     }
 
     private static void loadInventory(JsonArray inventory) {
