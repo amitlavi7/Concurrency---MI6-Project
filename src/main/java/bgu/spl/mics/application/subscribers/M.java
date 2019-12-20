@@ -31,10 +31,9 @@ public class M extends Subscriber {
 			if(agentsResolved.get() == "agentsSucceed") {
 				Future gadgetResolved = getSimplePublisher().sendEvent(new GadgetAvailableEvent(event.getMissionInfo().getGadget()));
 				if (gadgetResolved.get() == "gadgetSucceed") {
-					//need to check time
-					//if statment for time {
+					if(event.getMissionInfo().getTimeExpired()>time) {
 						getSimplePublisher().sendEvent(new SendAgentsEvent(event.getMissionInfo().getSerialAgentsNumbers(),event.getMissionInfo().getDuration()));
-						//}
+						}
 					getSimplePublisher().sendEvent(new ReleaseAgentsEvent(event.getMissionInfo().getSerialAgentsNumbers()));
 				}
 			}
@@ -42,7 +41,6 @@ public class M extends Subscriber {
 
 		subscribeBroadcast(TickBroadcast.class, event ->{
 			time = event.getCurrentTick();
-
 		});
 
 		subscribeBroadcast(TimeIsUp.class, event ->{
