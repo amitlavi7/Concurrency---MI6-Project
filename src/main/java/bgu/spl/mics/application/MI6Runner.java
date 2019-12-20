@@ -58,6 +58,7 @@ public class MI6Runner {
 //        for(String gadget: inv.getItem()){
 //
 //        }
+        System.out.println("main up");
     }
 
     private static void loadInventory(JsonArray inventory) {

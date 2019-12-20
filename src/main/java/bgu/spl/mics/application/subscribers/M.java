@@ -29,10 +29,12 @@ public class M extends Subscriber {
 		subscribeEvent(MissionReceivedEvent.class, event -> {
 			System.out.println("M's MissionReceivedEvent callback");//harta
 			Future agentsResolved = getSimplePublisher().sendEvent(new AgentsAvailableEvent(event.getMissionInfo().getSerialAgentsNumbers()));
-			if(agentsResolved.get() == "agentsSucceed") {
+			if(agentsResolved.get() == "agentsAvailableSucceed") {
+				System.out.println("--------------------if number 1");
 				Future gadgetResolved = getSimplePublisher().sendEvent(new GadgetAvailableEvent(event.getMissionInfo().getGadget()));
 				if (gadgetResolved.get() == "gadgetSucceed") {
 					if(event.getMissionInfo().getTimeExpired()>time) {
+						System.out.println("m want to send agents");
 						getSimplePublisher().sendEvent(new SendAgentsEvent(event.getMissionInfo().getSerialAgentsNumbers(),event.getMissionInfo().getDuration()));
 						complete(event,"missionSucceed");
 						}

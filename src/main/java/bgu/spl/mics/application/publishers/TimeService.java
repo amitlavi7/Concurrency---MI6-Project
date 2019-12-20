@@ -49,6 +49,7 @@ public class TimeService extends Publisher {
 				}
 				else{
 					timer.cancel();
+					System.out.println("time is up");
 					MessageBrokerImpl.getInstance().sendBroadcast(new TimeIsUp());
 				}
 			}

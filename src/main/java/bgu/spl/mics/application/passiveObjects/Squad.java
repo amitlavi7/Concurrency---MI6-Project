@@ -36,7 +36,7 @@ public class Squad {
 	 */
 	public void load (Agent[] agents) {
 		for (Agent agent : agents) {
-			this.agents.put(agent.getName(), agent);
+			this.agents.put(agent.getSerialNumber(), agent);
 		}
 	}
 
