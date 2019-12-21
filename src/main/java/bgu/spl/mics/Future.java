@@ -35,9 +35,10 @@ public class Future<T> {
 		synchronized (this){
 			while (!isDone()){
 				try {
+					System.out.println("The thread " + this + " is waiting");
 					wait();
 				} catch (InterruptedException e){
-					System.out.println("The thread was interrupted");
+					System.out.println("The thread " + this + " was interrupted");
 				}
 			}
 			return value;

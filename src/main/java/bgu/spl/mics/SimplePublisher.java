@@ -26,7 +26,7 @@ public final class SimplePublisher {
      * 	       			null in case no Subscriber has subscribed to {@code e.getClass()}.
      */
     public final <T> Future<T> sendEvent(Event<T> e) {
-        System.out.println("simple publisher send event");
+        System.out.println("simple publisher send event " + e.getClass());
         return messageBroker.sendEvent(e);
     }
 

@@ -38,7 +38,7 @@ public class Intelligence extends Subscriber {
 			missionInfo.setSerialAgentsNumbers(agentsSerialNumbers);
 			missionInfo.setDuration(mission.get("duration").getAsInt());
 			missionInfo.setGadget(mission.get("gadget").toString());
-			missionInfo.setMissionName(mission.get("missionName").toString());
+			missionInfo.setMissionName(mission.get("name").toString());
 			missionInfo.setTimeExpired(mission.get("timeExpired").getAsInt());
 			missionInfo.setTimeIssued(mission.get("timeIssued").getAsInt());
 			missions.add(missionInfo);
@@ -48,9 +48,9 @@ public class Intelligence extends Subscriber {
 
 	@Override
 	protected void initialize() {
-		System.out.println("intelligence initialized");
+		System.out.println("intelligence " + number + ": initialized");
 		subscribeBroadcast(TickBroadcast.class, event ->{
-			System.out.println("intelligence TickBroadcast");
+			System.out.println("intelligence " + number + ": TickBroadcast " + event.getCurrentTick());
 			if(missionsHashMap.containsKey(event.getCurrentTick())){
 				for(MissionInfo mission : missionsHashMap.get(event.getCurrentTick())){
 					getSimplePublisher().sendEvent(new MissionReceivedEvent(mission));

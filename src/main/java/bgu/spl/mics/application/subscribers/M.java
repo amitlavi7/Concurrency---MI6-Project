@@ -25,16 +25,16 @@ public class M extends Subscriber {
 
 	@Override
 	protected void initialize() {
-		System.out.println("M initialized");
+		System.out.println("M " + id + ": initialized");
 		subscribeEvent(MissionReceivedEvent.class, event -> {
-			System.out.println("M's MissionReceivedEvent callback");//harta
+			System.out.println("M " + id + ": MissionReceivedEvent event");//harta
 			Future agentsResolved = getSimplePublisher().sendEvent(new AgentsAvailableEvent(event.getMissionInfo().getSerialAgentsNumbers()));
 			if(agentsResolved.get() == "agentsAvailableSucceed") {
 				System.out.println("--------------------if number 1");
 				Future gadgetResolved = getSimplePublisher().sendEvent(new GadgetAvailableEvent(event.getMissionInfo().getGadget()));
 				if (gadgetResolved.get() == "gadgetSucceed") {
 					if(event.getMissionInfo().getTimeExpired()>time) {
-						System.out.println("m want to send agents");
+						System.out.println("M " + id + "  want to send agents");
 						getSimplePublisher().sendEvent(new SendAgentsEvent(event.getMissionInfo().getSerialAgentsNumbers(),event.getMissionInfo().getDuration()));
 						complete(event,"missionSucceed");
 						}

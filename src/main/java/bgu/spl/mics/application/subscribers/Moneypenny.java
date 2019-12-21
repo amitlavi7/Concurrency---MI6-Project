@@ -23,10 +23,10 @@ public class Moneypenny extends Subscriber {
 
 	@Override
 	protected void initialize() {
-		System.out.println("Monneypenny initialized");
+		System.out.println("Monneypenny " + id + ": initialized");
 		if(id % 2 == 0) {
 			subscribeEvent(AgentsAvailableEvent.class, event -> {
-				System.out.println("Monneypenny AgentsAvailableEvent");
+				System.out.println("Monneypenny " + id + ": AgentsAvailableEvent");
 				if (!squad.getAgents(event.getAgentsNumbers())) {
 					try {
 						wait();
@@ -41,13 +41,13 @@ public class Moneypenny extends Subscriber {
 		else {
 			subscribeEvent(SendAgentsEvent.class, event -> {
 				squad.sendAgents(event.getAgentsToSend(), event.getDurationForMission());
-				System.out.println("Monneypenny SendAgentsEvent");
+				System.out.println("Monneypenny " + id + ": SendAgentsEvent");
 				complete(event, "missionCompleted!");
 				squad.releaseAgents(event.getAgentsToSend());
 			});
 			subscribeEvent(ReleaseAgentsEvent.class, event -> {
 				squad.releaseAgents(event.getAgentsNumbers());
-				System.out.println("Monneypenny ReleaseAgentsEvent");
+				System.out.println("Monneypenny " + id + ": ReleaseAgentsEvent");
 				complete(event, "mission Time is up!");
 			});
 		}
