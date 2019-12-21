@@ -43,11 +43,12 @@ public class M extends Subscriber {
 						complete(event,"missionSucceed");
 						}
 					else {
+						getSimplePublisher().sendEvent(new ReleaseAgentsEvent(event.getMissionInfo().getSerialAgentsNumbers()));
 						complete(event, "missionFailed");
 					}
-					getSimplePublisher().sendEvent(new ReleaseAgentsEvent(event.getMissionInfo().getSerialAgentsNumbers()));
 					}
 				else {
+					getSimplePublisher().sendEvent(new ReleaseAgentsEvent(event.getMissionInfo().getSerialAgentsNumbers()));
 					complete(event, "missionFailed");
 				}
 
