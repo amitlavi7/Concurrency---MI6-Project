@@ -35,17 +35,22 @@ public class M extends Subscriber {
 				if (gadgetResolved.get() == "gadgetSucceed") {
 					if(event.getMissionInfo().getTimeExpired()>time) {
 						System.out.println("M " + id + "  want to send agents");
-						getSimplePublisher().sendEvent(new SendAgentsEvent(event.getMissionInfo().getSerialAgentsNumbers(),event.getMissionInfo().getDuration()));
+						Future agentsSendCheck = getSimplePublisher().sendEvent(new SendAgentsEvent(event.getMissionInfo().getSerialAgentsNumbers(),event.getMissionInfo().getDuration()));
+							if(agentsSendCheck.get() == "agentsSent"){
+								getSimplePublisher().sendEvent(new ReleaseAgentsEvent(event.getMissionInfo().getSerialAgentsNumbers()));
+							}
 						complete(event,"missionSucceed");
 						}
 					else {
 						complete(event, "missionFailed");
 					}
+					getSimplePublisher().sendEvent(new ReleaseAgentsEvent(event.getMissionInfo().getSerialAgentsNumbers()));
 					}
 				else {
 					complete(event, "missionFailed");
 				}
-				getSimplePublisher().sendEvent(new ReleaseAgentsEvent(event.getMissionInfo().getSerialAgentsNumbers()));
+
+
 			}
 			else {
 				complete(event, "missionFailed");

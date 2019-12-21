@@ -42,13 +42,13 @@ public class Moneypenny extends Subscriber {
 			subscribeEvent(SendAgentsEvent.class, event -> {
 				squad.sendAgents(event.getAgentsToSend(), event.getDurationForMission());
 				System.out.println("Monneypenny " + id + ": SendAgentsEvent");
-				complete(event, "missionCompleted!");
 				squad.releaseAgents(event.getAgentsToSend());
+				complete(event, "agentsSent");
 			});
 			subscribeEvent(ReleaseAgentsEvent.class, event -> {
 				squad.releaseAgents(event.getAgentsNumbers());
 				System.out.println("Monneypenny " + id + ": ReleaseAgentsEvent");
-				complete(event, "mission Time is up!");
+				complete(event, "agentsReleased");
 			});
 		}
 		subscribeBroadcast(TimeIsUp.class, event ->{
