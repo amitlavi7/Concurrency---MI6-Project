@@ -37,6 +37,7 @@ public class M extends Subscriber {
 						System.out.println("M " + id + "  want to send agents");
 						Future agentsSendCheck = getSimplePublisher().sendEvent(new SendAgentsEvent(event.getMissionInfo().getSerialAgentsNumbers(),event.getMissionInfo().getDuration()));
 							if(agentsSendCheck.get() == "agentsSent"){
+								System.out.println("M " + id + " ask from monneypenny to release Agents");
 								getSimplePublisher().sendEvent(new ReleaseAgentsEvent(event.getMissionInfo().getSerialAgentsNumbers()));
 							}
 						complete(event,"missionSucceed");
@@ -62,6 +63,7 @@ public class M extends Subscriber {
 		});
 
 		subscribeBroadcast(TimeIsUp.class, event ->{
+			System.out.println("M " + id + ": is terminating");
 			terminate();
 		});
 	}

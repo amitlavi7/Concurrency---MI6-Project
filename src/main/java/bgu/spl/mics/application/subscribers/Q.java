@@ -31,6 +31,7 @@ public class Q extends Subscriber {
 				complete(event, "gadgetFailed");
 		});
 		subscribeBroadcast(TimeIsUp.class, event ->{
+			System.out.println("Q " + ": is terminating");
 			terminate();
 		});
 	}

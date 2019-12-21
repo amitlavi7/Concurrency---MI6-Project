@@ -60,7 +60,9 @@ public class Squad {
 			agents.get(serial).acquire();
 		}
 		try{
-			Thread.sleep(time);
+			System.out.println(Thread.currentThread().getName() + " is going to sleep for " + time + " ticks");
+			Thread.sleep(time*100);
+			System.out.println(Thread.currentThread().getName() + " is waking up");
 		}
 		catch(Exception e) {
 
@@ -83,6 +85,8 @@ public class Squad {
 			for (String serial : serials) {
 				if (!agents.containsKey(serial) || !agents.get(serial).isAvailable())
 					return false;
+			}
+			for (String serial : serials) {
 				agents.get(serial).acquire();
 			}
 		}
