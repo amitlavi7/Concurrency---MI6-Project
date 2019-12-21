@@ -72,8 +72,8 @@ public class MI6Runner {
     private static void loadSquad(JsonArray squad) {
         Squad s = Squad.getInstance();
         Agent[] AgentsToLoad = new Agent[squad.size()];
-        Agent agent = new Agent();
         for (int i = 0; i < squad.size(); i++) {
+            Agent agent = new Agent();
             agent.setName(((JsonObject)squad.get(i)).get("name").toString());
             agent.setSerialNumber(((JsonObject)squad.get(i)).get("serialNumber").toString());
             AgentsToLoad[i] = agent;
