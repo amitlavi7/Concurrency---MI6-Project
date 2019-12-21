@@ -27,6 +27,7 @@ public class Moneypenny extends Subscriber {
 		if(id % 2 == 0) {
 			subscribeEvent(AgentsAvailableEvent.class, event -> {
 				System.out.println("Monneypenny " + id + ": AgentsAvailableEvent");
+				event.getReport().setMoneypenny(id);
 				if (!squad.getAgents(event.getAgentsNumbers())) {
 					try {
 						wait();

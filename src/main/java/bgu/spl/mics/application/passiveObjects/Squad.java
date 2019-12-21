@@ -48,7 +48,7 @@ public class Squad {
 			if (agents.containsKey(serial))
 				agents.get(serial).release();
 		}
-//		notifyAll();
+//		notifyAll(); TODO:need to check
 	}
 
 	/**

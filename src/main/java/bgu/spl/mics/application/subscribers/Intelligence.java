@@ -53,7 +53,7 @@ public class Intelligence extends Subscriber {
 			System.out.println("intelligence " + number + ": TickBroadcast " + event.getCurrentTick());
 			if(missionsHashMap.containsKey(event.getCurrentTick())){
 				for(MissionInfo mission : missionsHashMap.get(event.getCurrentTick())){
-					getSimplePublisher().sendEvent(new MissionReceivedEvent(mission));
+					getSimplePublisher().sendEvent(new MissionReceivedEvent(mission, event.getCurrentTick()));
 				}
 			}
 		});

@@ -4,6 +4,7 @@ import bgu.spl.mics.Callback;
 import bgu.spl.mics.Future;
 import bgu.spl.mics.Subscriber;
 import bgu.spl.mics.application.messages.*;
+import bgu.spl.mics.application.passiveObjects.Diary;
 
 /**
  * M handles ReadyEvent - fills a report and sends agents to mission.
@@ -15,6 +16,7 @@ public class M extends Subscriber {
 
 	private int id;
 	private int time;
+	private Diary diary = Diary.getInstance();
 
 	public M(int id) {
 		super("M");
@@ -28,16 +30,23 @@ public class M extends Subscriber {
 		System.out.println("M " + id + ": initialized");
 		subscribeEvent(MissionReceivedEvent.class, event -> {
 			System.out.println("M " + id + ": MissionReceivedEvent event");//harta
-			Future agentsResolved = getSimplePublisher().sendEvent(new AgentsAvailableEvent(event.getMissionInfo().getSerialAgentsNumbers()));
+			event.getReport().setTimeCreated(time);
+			event.getReport().setAgentsSerialNumbers(event.getMissionInfo().getSerialAgentsNumbers());
+			event.getReport().setM(id);
+//			event.getReport().setAgentsNames(event.getMissionInfo().get); add the names
+			event.getReport().setGadgetName(event.getMissionInfo().getGadget());
+			event.getReport().setMissionName(event.getMissionInfo().getMissionName());
+			Future agentsResolved = getSimplePublisher().sendEvent(new AgentsAvailableEvent(event.getMissionInfo().getSerialAgentsNumbers(), event.getReport()));
 			if(agentsResolved.get() == "agentsAvailableSucceed") {
 				System.out.println("--------------------if number 1");
-				Future gadgetResolved = getSimplePublisher().sendEvent(new GadgetAvailableEvent(event.getMissionInfo().getGadget()));
+				Future gadgetResolved = getSimplePublisher().sendEvent(new GadgetAvailableEvent(event.getMissionInfo().getGadget(), event.getReport()));
 				if (gadgetResolved.get() == "gadgetSucceed") {
 					if(event.getMissionInfo().getTimeExpired()>time) {
 						System.out.println("M " + id + "  want to send agents");
 						Future agentsSendCheck = getSimplePublisher().sendEvent(new SendAgentsEvent(event.getMissionInfo().getSerialAgentsNumbers(),event.getMissionInfo().getDuration()));
 							if(agentsSendCheck.get() == "agentsSent"){
 								System.out.println("M " + id + " ask from monneypenny to release Agents");
+								diary.addReport(event.getReport());
 								getSimplePublisher().sendEvent(new ReleaseAgentsEvent(event.getMissionInfo().getSerialAgentsNumbers()));
 							}
 						complete(event,"missionSucceed");
@@ -57,6 +66,7 @@ public class M extends Subscriber {
 			else {
 				complete(event, "missionFailed");
 			}
+			diary.incrementTotal();
 		});
 
 		subscribeBroadcast(TickBroadcast.class, event ->{
@@ -65,6 +75,7 @@ public class M extends Subscriber {
 
 		subscribeBroadcast(TimeIsUp.class, event ->{
 			System.out.println("M " + id + ": is terminating");
+			diary.printToFile("Diary.json");
 			terminate();
 		});
 	}
