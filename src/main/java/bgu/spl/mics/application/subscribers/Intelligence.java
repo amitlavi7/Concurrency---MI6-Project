@@ -37,8 +37,8 @@ public class Intelligence extends Subscriber {
 			LinkedList<String> agentsSerialNumbers = jsonArrayToList(mission.get("serialAgentsNumbers").getAsJsonArray());
 			missionInfo.setSerialAgentsNumbers(agentsSerialNumbers);
 			missionInfo.setDuration(mission.get("duration").getAsInt());
-			missionInfo.setGadget(mission.get("gadget").toString());
-			missionInfo.setMissionName(mission.get("name").toString());
+			missionInfo.setGadget(mission.get("gadget").getAsString());
+			missionInfo.setMissionName(mission.get("name").getAsString());
 			missionInfo.setTimeExpired(mission.get("timeExpired").getAsInt());
 			missionInfo.setTimeIssued(mission.get("timeIssued").getAsInt());
 			missions.add(missionInfo);
@@ -53,6 +53,7 @@ public class Intelligence extends Subscriber {
 			System.out.println("intelligence " + number + ": TickBroadcast " + event.getCurrentTick());
 			if(missionsHashMap.containsKey(event.getCurrentTick())){
 				for(MissionInfo mission : missionsHashMap.get(event.getCurrentTick())){
+					System.out.println("intelligence " + number + ": send event ");
 					getSimplePublisher().sendEvent(new MissionReceivedEvent(mission, event.getCurrentTick()));
 				}
 			}
@@ -65,7 +66,7 @@ public class Intelligence extends Subscriber {
 	private LinkedList<String> jsonArrayToList (JsonArray array) {
 		LinkedList<String> list = new LinkedList<>();
 		for (int i = 0; i < array.size(); i++){
-			list.add(array.get(i).toString());
+			list.add(array.get(i).getAsString());
 		}
 		return list;
 	}

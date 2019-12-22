@@ -11,9 +11,9 @@ import java.util.concurrent.*;
 public class MessageBrokerImpl implements MessageBroker {
 
 	private ConcurrentHashMap<Subscriber, LinkedBlockingQueue <Message>> subscribersMissionQueues = new ConcurrentHashMap <>();
-	private ConcurrentHashMap<Subscriber, LinkedBlockingQueue <Class<? extends Message>>> subscribersTopicQueues = new ConcurrentHashMap <>();
-	private ConcurrentHashMap<Class<? extends Event<?>>, LinkedBlockingQueue<Subscriber>> eventHandlerQueues = new ConcurrentHashMap<>();
-	private ConcurrentHashMap<Class<? extends Broadcast>, LinkedBlockingQueue<Subscriber>> broadcastQueue = new ConcurrentHashMap<>();
+	private ConcurrentHashMap<Subscriber, ConcurrentLinkedQueue <Class<? extends Message>>> subscribersTopicQueues = new ConcurrentHashMap <>();
+	private ConcurrentHashMap<Class<? extends Event<?>>, ConcurrentLinkedQueue<Subscriber>> eventHandlerQueues = new ConcurrentHashMap<>();
+	private ConcurrentHashMap<Class<? extends Broadcast>, ConcurrentLinkedQueue<Subscriber>> broadcastQueue = new ConcurrentHashMap<>();
 	private ConcurrentHashMap<Event<?>,Future> holdsFuture = new ConcurrentHashMap<>();
 	private static class MessageBrokerHolder {
 		private static MessageBroker instance = new MessageBrokerImpl();
@@ -27,7 +27,7 @@ public class MessageBrokerImpl implements MessageBroker {
 
 	@Override
 	public <T> void subscribeEvent(Class<? extends Event<T>> type, Subscriber m) {
-		eventHandlerQueues.putIfAbsent(type, new LinkedBlockingQueue<>());
+		eventHandlerQueues.putIfAbsent(type, new ConcurrentLinkedQueue<>());
 		eventHandlerQueues.get(type).add(m);
 		subscribersTopicQueues.get(m).add(type);
 //		if(!eventHandlerQueues.contains(type)){
@@ -43,7 +43,7 @@ public class MessageBrokerImpl implements MessageBroker {
 
 	@Override
 	public void subscribeBroadcast(Class<? extends Broadcast> type, Subscriber m) {
-			broadcastQueue.putIfAbsent(type, new LinkedBlockingQueue<>());
+			broadcastQueue.putIfAbsent(type, new ConcurrentLinkedQueue<>());
 			broadcastQueue.get(type).add(m);
 			subscribersTopicQueues.get(m).add(type);
 	}
@@ -94,7 +94,7 @@ public class MessageBrokerImpl implements MessageBroker {
 	@Override
 	public void register(Subscriber m) {
 		subscribersMissionQueues.putIfAbsent(m, new LinkedBlockingQueue<>());
-		subscribersTopicQueues.putIfAbsent(m, new LinkedBlockingQueue<>());
+		subscribersTopicQueues.putIfAbsent(m, new ConcurrentLinkedQueue<>());
 	}
 
 	@Override
@@ -116,7 +116,7 @@ public class MessageBrokerImpl implements MessageBroker {
 
 	@Override
 	public Message awaitMessage(Subscriber m) throws InterruptedException {
-		return subscribersMissionQueues.get(m).poll();
+		return subscribersMissionQueues.get(m).take();
 
 
 	}

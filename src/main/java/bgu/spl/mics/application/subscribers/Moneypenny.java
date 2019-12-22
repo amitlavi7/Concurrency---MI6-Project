@@ -14,7 +14,7 @@ import bgu.spl.mics.application.passiveObjects.Squad;
  */
 public class Moneypenny extends Subscriber {
 	private int id;
-	private Squad squad = Squad.getInstance();
+	private final Squad squad = Squad.getInstance();
 
 	public Moneypenny(int id) {
 		super("Moneypenny");
@@ -28,15 +28,24 @@ public class Moneypenny extends Subscriber {
 			subscribeEvent(AgentsAvailableEvent.class, event -> {
 				System.out.println("Monneypenny " + id + ": AgentsAvailableEvent");
 				event.getReport().setMoneypenny(id);
-				if (!squad.getAgents(event.getAgentsNumbers())) {
+				event.getReport().setAgentsNames(squad.getAgentsNames(event.getReport().getAgentsSerialNumbers()));
+				synchronized (squad){
+				while (!squad.getAgents(event.getAgentsNumbers())) {
 					try {
-						wait();
-					} catch (Exception ignored) {
+						squad.wait();
+					} catch (InterruptedException ignored) {
+
+//
 					}
-//				complete(event, "agentsAvailableFailed");
-				} else {
-					complete(event, "agentsAvailableSucceed");
 				}
+//					try {
+//						wait();
+//					} catch (Exception ignored) {
+//					}
+//				complete(event, "agentsAvailableFailed");
+				}
+					complete(event, "agentsAvailableSucceed");
+
 			});
 		}
 		else {
@@ -47,8 +56,9 @@ public class Moneypenny extends Subscriber {
 				complete(event, "agentsSent");
 			});
 			subscribeEvent(ReleaseAgentsEvent.class, event -> {
-				squad.releaseAgents(event.getAgentsNumbers());
 				System.out.println("Monneypenny " + id + ": ReleaseAgentsEvent");
+
+				squad.releaseAgents(event.getAgentsNumbers());
 				complete(event, "agentsReleased");
 			});
 		}

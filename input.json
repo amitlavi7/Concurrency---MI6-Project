@@ -7,7 +7,7 @@
     ],
     "services": {
         "M": 2,
-        "Moneypenny": 2,
+        "Moneypenny": 4,
         "intelligence": [
             {
                 "missions": [

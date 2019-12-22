@@ -65,7 +65,7 @@ public class MI6Runner {
         Inventory inv = Inventory.getInstance();
         String[] itemsToLoad = new String[inventory.size()];
         for (int i = 0; i < inventory.size(); i++)
-            itemsToLoad[i] = inventory.get(i).toString();
+            itemsToLoad[i] = inventory.get(i).getAsString();
         inv.load(itemsToLoad);
     }
 
@@ -74,8 +74,8 @@ public class MI6Runner {
         Agent[] AgentsToLoad = new Agent[squad.size()];
         for (int i = 0; i < squad.size(); i++) {
             Agent agent = new Agent();
-            agent.setName(((JsonObject)squad.get(i)).get("name").toString());
-            agent.setSerialNumber(((JsonObject)squad.get(i)).get("serialNumber").toString());
+            agent.setName(((JsonObject)squad.get(i)).get("name").getAsString());
+            agent.setSerialNumber(((JsonObject)squad.get(i)).get("serialNumber").getAsString());
             AgentsToLoad[i] = agent;
         }
         s.load(AgentsToLoad);

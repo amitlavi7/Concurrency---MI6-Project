@@ -44,11 +44,17 @@ public class Squad {
 	 * Releases agents.
 	 */
 	public void releaseAgents(List<String> serials){
-		for (String serial: serials){
-			if (agents.containsKey(serial))
-				agents.get(serial).release();
+		synchronized (this) { // dont think that we need to synchronize
+			for (String serial : serials) {
+				if (agents.containsKey(serial))
+					agents.get(serial).release();
+			}
+			System.out.println("releasing agents");
+			notifyAll();
+			System.out.println("wake threads");
 		}
-//		notifyAll(); TODO:need to check
+
+
 	}
 
 	/**
@@ -67,10 +73,10 @@ public class Squad {
 		catch(Exception e) {
 
 		}
-		for (String serial: serials){
-			if (agents.containsKey(serial))
-				agents.get(serial).release();
-		}
+//		for (String serial: serials){
+//			if (agents.containsKey(serial))
+//				agents.get(serial).release();
+//		}
 
 
 	}
