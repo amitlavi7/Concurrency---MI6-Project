@@ -26,26 +26,24 @@ public class Moneypenny extends Subscriber {
 		System.out.println("Monneypenny " + id + ": initialized");
 		if(id % 2 == 0) {
 			subscribeEvent(AgentsAvailableEvent.class, event -> {
-				System.out.println("Monneypenny " + id + ": AgentsAvailableEvent");
-				event.getReport().setMoneypenny(id);
-				event.getReport().setAgentsNames(squad.getAgentsNames(event.getReport().getAgentsSerialNumbers()));
-				synchronized (squad){
-				while (!squad.getAgents(event.getAgentsNumbers())) {
-					try {
-						squad.wait();
-					} catch (InterruptedException ignored) {
-
-//
-					}
-				}
-//					try {
-//						wait();
-//					} catch (Exception ignored) {
+					System.out.println("Monneypenny " + id + ": AgentsAvailableEvent");
+					event.getReport().setMoneypenny(id);
+					event.getReport().setAgentsNames(squad.getAgentsNames(event.getReport().getAgentsSerialNumbers()));
+				if (squad.getAgents(event.getAgentsNumbers())) {
+//					synchronized (squad) {
+//						while (!squad.getAgents(event.getAgentsNumbers())) {
+//							try {
+//								squad.wait();
+//							} catch (InterruptedException ignored) {
+//							}
+//						}
 //					}
-//				complete(event, "agentsAvailableFailed");
-				}
 					complete(event, "agentsAvailableSucceed");
+				}
+				else {
+					complete(event, "agentIsNotExist");
 
+				}
 			});
 		}
 		else {

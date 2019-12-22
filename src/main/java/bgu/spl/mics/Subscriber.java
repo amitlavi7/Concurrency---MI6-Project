@@ -28,7 +28,7 @@ public abstract class Subscriber extends RunnableSubPub {
     public Subscriber(String name) {
         super(name);
         callbackMap = new ConcurrentHashMap<>();
-        messageBroker.register(this);
+//        messageBroker.register(this);
     }
 
     /**
@@ -102,7 +102,7 @@ public abstract class Subscriber extends RunnableSubPub {
      */
     protected final void terminate() {
         this.terminated = true;
-        messageBroker.unregister(this);
+//        messageBroker.unregister(this);
     }
 
     /**
@@ -111,6 +111,7 @@ public abstract class Subscriber extends RunnableSubPub {
      */
     @Override
     public final void run() {
+        messageBroker.register(this);
         initialize();
         while (!terminated) {
             try {
@@ -118,6 +119,7 @@ public abstract class Subscriber extends RunnableSubPub {
                 callbackMap.get(message.getClass()).call(message);
             } catch (Exception ignored) {}
         }
+        messageBroker.unregister(this);
         System.out.println(this.getName() + " terminated");
     }
 }

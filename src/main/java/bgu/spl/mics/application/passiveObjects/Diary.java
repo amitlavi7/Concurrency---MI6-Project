@@ -58,9 +58,11 @@ public class Diary {
 		//TODO: Implement this
 		try (Writer writer = new FileWriter(filename)) {
 			Gson gson = new GsonBuilder().setPrettyPrinting().create();
-			gson.toJson(reports, writer);
-			gson.toJson("total",writer);
-			gson.toJson( total,writer);
+			Reports reportsToPrint = new Reports(reports, total) ;
+//			gson.toJson(reports, writer);
+//			gson.toJson("total" ,writer);
+//			gson.toJson(total,writer);
+			gson.toJson(reportsToPrint,writer);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

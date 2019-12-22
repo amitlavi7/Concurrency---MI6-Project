@@ -40,7 +40,6 @@ public class M extends Subscriber {
 			if(agentsResolved.get() == "agentsAvailableSucceed") {
 				System.out.println("--------------------if number 1");
 				System.out.println(getName() + " " + id + " : has Agents that Available");
-
 				Future gadgetResolved = getSimplePublisher().sendEvent(new GadgetAvailableEvent(event.getMissionInfo().getGadget(), event.getReport()));
 				if (gadgetResolved.get() == "gadgetSucceed") {
 					if(event.getMissionInfo().getTimeExpired() > time) {
