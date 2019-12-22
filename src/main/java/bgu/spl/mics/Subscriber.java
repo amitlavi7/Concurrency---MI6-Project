@@ -118,5 +118,6 @@ public abstract class Subscriber extends RunnableSubPub {
                 callbackMap.get(message.getClass()).call(message);
             } catch (Exception ignored) {}
         }
+        System.out.println(this.getName() + " terminated");
     }
 }

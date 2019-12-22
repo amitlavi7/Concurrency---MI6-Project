@@ -1,10 +1,7 @@
 package bgu.spl.mics.application.subscribers;
 
 import bgu.spl.mics.Subscriber;
-import bgu.spl.mics.application.messages.GadgetAvailableEvent;
-import bgu.spl.mics.application.messages.MissionReceivedEvent;
-import bgu.spl.mics.application.messages.TickBroadcast;
-import bgu.spl.mics.application.messages.TimeIsUp;
+import bgu.spl.mics.application.messages.*;
 import bgu.spl.mics.application.passiveObjects.Inventory;
 
 /**
@@ -38,7 +35,7 @@ public class Q extends Subscriber {
 			time = event.getCurrentTick();
 		});
 
-		subscribeBroadcast(TimeIsUp.class, event ->{
+		subscribeBroadcast(ExecuterExecutingBroadcast.class, event ->{
 			System.out.println("Q " + ": is terminating");
 			inventory.printToFile("inventory-file.json");
 			terminate();

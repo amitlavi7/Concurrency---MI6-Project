@@ -62,7 +62,7 @@ public class Moneypenny extends Subscriber {
 				complete(event, "agentsReleased");
 			});
 		}
-		subscribeBroadcast(TimeIsUp.class, event ->{
+		subscribeBroadcast(ExecuterExecutingBroadcast.class, event ->{
 			System.out.println("Monneypenny " + id + ": is terminating");
 			terminate();
 		});

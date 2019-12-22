@@ -3,10 +3,7 @@ package bgu.spl.mics.application;
 import bgu.spl.mics.application.passiveObjects.Agent;
 import bgu.spl.mics.application.passiveObjects.Inventory;
 import bgu.spl.mics.application.passiveObjects.Squad;
-import bgu.spl.mics.application.subscribers.Intelligence;
-import bgu.spl.mics.application.subscribers.M;
-import bgu.spl.mics.application.subscribers.Q;
-import bgu.spl.mics.application.subscribers.Moneypenny;
+import bgu.spl.mics.application.subscribers.*;
 import bgu.spl.mics.application.publishers.TimeService;
 import com.google.gson.*;
 
@@ -44,6 +41,7 @@ public class MI6Runner {
         Q q = new Q ();
         int time = services.get("time").getAsInt();
         TimeService timeService = new TimeService(time);
+        Executer exe = new Executer(mList.size());
         for (M m : mList)
             threadsList.add(new Thread(m));
         for (Moneypenny moneypenny : moneypennies)
@@ -52,6 +50,7 @@ public class MI6Runner {
             threadsList.add(new Thread(intelligence));
         threadsList.add(new Thread(q));
         threadsList.add(new Thread(timeService));
+        threadsList.add(new Thread(exe));
         for (Thread t : threadsList)
             t.start();
 //        Inventory inv = Inventory.getInstance();

@@ -72,7 +72,7 @@ public class M extends Subscriber {
 				System.out.println(getName() + id + " failed no agents ");
 				complete(event, "missionFailed");
 			}
-			System.out.println(getName() + id + " executed event ");
+			System.out.println(getName() + id + " event finished");
 			diary.incrementTotal();
 		});
 
@@ -83,6 +83,7 @@ public class M extends Subscriber {
 		subscribeBroadcast(TimeIsUp.class, event ->{
 			System.out.println("M " + id + ": is terminating");
 			diary.printToFile("Diary.json");
+			getSimplePublisher().sendEvent(new MTerminateEvent());
 			terminate();
 		});
 	}
