@@ -37,7 +37,7 @@ public class Q extends Subscriber {
 
 		subscribeBroadcast(ExecuterExecutingBroadcast.class, event ->{
 			System.out.println("Q " + ": is terminating");
-			inventory.printToFile("inventory-file.json");
+//			inventory.printToFile("inventory-file.json");
 			terminate();
 		});
 	}

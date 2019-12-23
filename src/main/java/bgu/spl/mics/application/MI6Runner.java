@@ -1,13 +1,13 @@
 package bgu.spl.mics.application;
 
 import bgu.spl.mics.application.passiveObjects.Agent;
+import bgu.spl.mics.application.passiveObjects.Diary;
 import bgu.spl.mics.application.passiveObjects.Inventory;
 import bgu.spl.mics.application.passiveObjects.Squad;
 import bgu.spl.mics.application.subscribers.*;
 import bgu.spl.mics.application.publishers.TimeService;
 import com.google.gson.*;
 
-import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.util.LinkedList;
@@ -21,7 +21,7 @@ import com.google.gson.JsonObject;
  */
 public class MI6Runner {
     public static void main(String[] args) throws FileNotFoundException {
-        if (args.length != 1){
+        if (args.length != 3){
             System.out.println("Invalid args size");
             return;
         }
@@ -53,11 +53,17 @@ public class MI6Runner {
         threadsList.add(new Thread(exe));
         for (Thread t : threadsList)
             t.start();
-//        Inventory inv = Inventory.getInstance();
-//        for(String gadget: inv.getItem()){
-//
-//        }
+        while (Thread.activeCount() > 2){
+            try {
+                Thread.sleep(100);
+            } catch (Exception ignored) {
+            }
+        }
         System.out.println("main up");
+        Inventory inv = Inventory.getInstance();
+        inv.printToFile(args[1]);
+        Diary diary = Diary.getInstance();
+        diary.printToFile(args[2]);
     }
 
     private static void loadInventory(JsonArray inventory) {

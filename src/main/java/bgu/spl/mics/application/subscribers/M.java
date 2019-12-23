@@ -81,7 +81,7 @@ public class M extends Subscriber {
 
 		subscribeBroadcast(TimeIsUp.class, event ->{
 			System.out.println("M " + id + ": is terminating");
-			diary.printToFile("Diary.json");
+//			diary.printToFile("Diary.json");
 			getSimplePublisher().sendEvent(new MTerminateEvent());
 			terminate();
 		});
