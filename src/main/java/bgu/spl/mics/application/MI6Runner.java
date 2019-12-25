@@ -53,19 +53,19 @@ public class MI6Runner {
 //        threadsList.add(new Thread(exe));
         for (Thread t : threadsList)
             t.start();
-//        for (Thread t : threadsList) {
-//            try {
-//                t.join();
-//            } catch (InterruptedException e) {
-//                e.printStackTrace();
-//            }
-//        }
-        while (Thread.activeCount() > 2){
+        for (Thread t : threadsList) {
             try {
-                Thread.sleep(100);
-            } catch (Exception ignored) {
+                t.join();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
             }
         }
+//        while (Thread.activeCount() > 2){
+//            try {
+//                Thread.sleep(100);
+//            } catch (Exception ignored) {
+//            }
+//        }
         System.out.println("main up");
         Inventory inv = Inventory.getInstance();
         inv.printToFile(args[1]);
