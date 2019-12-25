@@ -45,13 +45,22 @@ public class Squad {
 	 */
 	public void releaseAgents(List<String> serials){
 		synchronized (this) { // dont think that we need to synchronize
-			for (String serial : serials) {
-				if (agents.containsKey(serial))
+			if (serials == null){
+				for (String serial : agents.keySet()){
+					System.out.println("releasing agent " + agents.get(serial).getSerialNumber());
 					agents.get(serial).release();
+					System.out.println("agent " + agents.get(serial).getSerialNumber() + " availability: " + agents.get(serial).isAvailable());
+				}
 			}
-			System.out.println("releasing agents");
-			notifyAll();
+			else {
+				for (String serial : serials) {
+					if (agents.containsKey(serial))
+						agents.get(serial).release();
+				}
+				System.out.println("releasing agents");
+			}
 			System.out.println("wake threads");
+			notifyAll();
 		}
 
 
@@ -95,6 +104,7 @@ public class Squad {
 			for (String serial : serials) {
 				if (!agents.get(serial).isAvailable()) {
 					try {
+						System.out.println("agent " + agents.get(serial).getSerialNumber() + " availability: " + agents.get(serial).isAvailable());
 						wait();
 					} catch (Exception ignored) {
 					}
@@ -102,6 +112,7 @@ public class Squad {
 			}
 			for (String serial : serials) {
 				agents.get(serial).acquire();
+				System.out.println("acquire: agent " + agents.get(serial).getSerialNumber() + " availability: " + agents.get(serial).isAvailable());
 			}
 		}
 		return true;

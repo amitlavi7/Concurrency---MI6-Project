@@ -34,14 +34,14 @@ public class MI6Runner {
         LinkedList<M> mList = new LinkedList<>();
         LinkedList<Moneypenny> moneypennies = new LinkedList<>();
         LinkedList<Intelligence> intelligenceList = new LinkedList<>();
+        int time = services.get("time").getAsInt();
         loadInventory(inventory);
         loadSquad(squad);
-        loadServices(services, mList, moneypennies, intelligenceList);
+        loadServices(services, mList, moneypennies, intelligenceList, time);
         List<Thread> threadsList = new LinkedList<>();
         Q q = new Q ();
-        int time = services.get("time").getAsInt();
         TimeService timeService = new TimeService(time);
-        Executer exe = new Executer(mList.size());
+//        Executer exe = new Executer(mList.size());
         for (M m : mList)
             threadsList.add(new Thread(m));
         for (Moneypenny moneypenny : moneypennies)
@@ -50,9 +50,16 @@ public class MI6Runner {
             threadsList.add(new Thread(intelligence));
         threadsList.add(new Thread(q));
         threadsList.add(new Thread(timeService));
-        threadsList.add(new Thread(exe));
+//        threadsList.add(new Thread(exe));
         for (Thread t : threadsList)
             t.start();
+//        for (Thread t : threadsList) {
+//            try {
+//                t.join();
+//            } catch (InterruptedException e) {
+//                e.printStackTrace();
+//            }
+//        }
         while (Thread.activeCount() > 2){
             try {
                 Thread.sleep(100);
@@ -86,7 +93,7 @@ public class MI6Runner {
         s.load(AgentsToLoad);
     }
 
-    private static void loadServices(JsonObject services, LinkedList<M> mList, LinkedList<Moneypenny> moneypennies, LinkedList<Intelligence> intelligenceList){
+    private static void loadServices(JsonObject services, LinkedList<M> mList, LinkedList<Moneypenny> moneypennies, LinkedList<Intelligence> intelligenceList, int time){
         int msNumber = services.get("M").getAsInt();
         int moneypennyNumber = services.get("Moneypenny").getAsInt();
         JsonArray missionsInfo = services.get("intelligence").getAsJsonArray();
@@ -97,7 +104,7 @@ public class MI6Runner {
             intelligenceList.add(intelligence);
         }
         for (int i = 0; i < msNumber; i++) {
-            M m = new M(i);
+            M m = new M(i, time);
             mList.add(m);
         }
         for (int i = 0; i < moneypennyNumber; i++) {

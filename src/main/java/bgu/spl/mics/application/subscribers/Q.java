@@ -35,10 +35,15 @@ public class Q extends Subscriber {
 			time = event.getCurrentTick();
 		});
 
-		subscribeBroadcast(ExecuterExecutingBroadcast.class, event ->{
-			System.out.println("Q " + ": is terminating");
+//		subscribeBroadcast(ExecuterExecutingBroadcast.class, event ->{
+//			System.out.println("Q " + ": is terminating");
+////			inventory.printToFile("inventory-file.json");
+//			terminate();
+
+			subscribeBroadcast(TimeIsUp.class, event ->{
+				System.out.println("Q " + ": is terminating");
 //			inventory.printToFile("inventory-file.json");
-			terminate();
+				terminate();
 		});
 	}
 }

@@ -73,8 +73,8 @@ public class MessageBrokerImpl implements MessageBroker {
 	@Override
 	public <T> Future<T> sendEvent(Event<T> e) {
 		System.out.println("MessageBroker send event " + e.getClass());
-		if(eventHandlerQueues.containsKey(e.getClass()) && !eventHandlerQueues.get(e.getClass()).isEmpty()){
-			synchronized (eventHandlerQueues.get(e.getClass())) {
+
+				synchronized (eventHandlerQueues.get(e.getClass())) {
 				Subscriber subGetMission = eventHandlerQueues.get(e.getClass()).poll();
 				Future<T> future = new Future<>();
 				holdsFuture.putIfAbsent(e, future);
@@ -87,7 +87,7 @@ public class MessageBrokerImpl implements MessageBroker {
 					future.resolve(null);
 				}
 			}
-		}
+
 			return null;
 	}
 
@@ -99,7 +99,17 @@ public class MessageBrokerImpl implements MessageBroker {
 
 	@Override
 	public void unregister(Subscriber m) {
-		LinkedBlockingQueue <Class<? extends Message>> temp = new LinkedBlockingQueue<>(subscribersTopicQueues.get(m));
+		ConcurrentLinkedQueue <Class<? extends Message>> temp = new ConcurrentLinkedQueue<>(subscribersTopicQueues.get(m));
+		LinkedBlockingQueue<Message> temp2 = new LinkedBlockingQueue<>(subscribersMissionQueues.get(m));
+		while (!temp2.isEmpty()){
+			try {
+				Message mes = temp2.take();
+				holdsFuture.get(mes).resolve("fail");
+				holdsFuture.remove(mes);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+		}
 		subscribersMissionQueues.remove(m);
 		subscribersTopicQueues.remove(m);
 		while(!temp.isEmpty()){

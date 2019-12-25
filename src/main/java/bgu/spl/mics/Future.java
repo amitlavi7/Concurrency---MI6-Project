@@ -54,6 +54,7 @@ public class Future<T> {
 				value = result;
 				done = true;
 				notifyAll();
+				System.out.println("notify futere ******************************************");
 			}
 		}
 	}
@@ -80,8 +81,9 @@ public class Future<T> {
 		synchronized (this){
 			while (!isDone()){
 				try {
-					wait(unit.toSeconds(timeout));
-					return value;
+					wait(unit.toSeconds(timeout*100));
+					System.out.println("the time was ended ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+//					return value;
 				} catch (InterruptedException e){
 					System.out.println("The thread was interrupted");
 				}
