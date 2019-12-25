@@ -43,7 +43,7 @@ public class TimeService extends Publisher {
 		timer.schedule(new TimerTask() {
 			@Override
 			public void run() {
-				if (timeTicks > currenttime) {
+				if (timeTicks >= currenttime) {
 					MessageBrokerImpl.getInstance().sendBroadcast(new TickBroadcast(currenttime));
 					currenttime++;
 				}
