@@ -60,14 +60,14 @@ public class Moneypenny extends Subscriber {
 				complete(event, "agentsReleased");
 			});
 		}
-//		subscribeBroadcast(ExecuterExecutingBroadcast.class, event ->{
-//			System.out.println("Monneypenny " + id + ": is terminating");
-//			terminate();
+		subscribeBroadcast(ExecuterExecutingBroadcast.class, event ->{
+			System.out.println("Monneypenny " + id + ": is terminating");
+			terminate();
 
-			subscribeBroadcast(TimeIsUp.class, event ->{
-				System.out.println("Monneypenny " + id + ": is terminating");
-				squad.releaseAgents(null);
-				terminate();
+//			subscribeBroadcast(TimeIsUp.class, event ->{
+//				System.out.println("Monneypenny " + id + ": is terminating");
+//				squad.releaseAgents(null);
+//				terminate();
 		});
 	}
 }

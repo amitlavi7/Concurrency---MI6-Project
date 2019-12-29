@@ -1,110 +1,115 @@
 {
     "inventory": [
-        "Sky Hook",
-        "Dagger shoe",
-        "Dagger shoe1",
-        "Gun",
-        "Wep",
-        "Wep1",
-        "Beer"
+        "Mission1Tool",
+        "Mission2Tool",
+        "Mission3Tool",
+        "Mission4Tool",
+        "Mission5Tool",
+        "Mission6Tool"
     ],
     "services": {
-        "M": 2,
+        "M": 6,
         "Moneypenny": 2,
         "intelligence": [
             {
                 "missions": [
-
                     {
-                        "serialAgentsNumbers": ["007"],
-                        "duration": 15,
-                        "gadget": "Sky Hook",
-                        "name": "Thunderball1",
-                        "timeExpired": 15,
-                        "timeIssued": 3
+                        "serialAgentsNumbers": [
+                            "001",
+                            "002",
+                            "003"
+                        ],
+                        "duration": 4,
+                        "gadget": "Mission1Tool",
+                        "name": "Mission1",
+                        "timeExpired": 3,
+                        "timeIssued": 1
                     },
                     {
-                        "serialAgentsNumbers": ["007"],
-                        "duration": 10,
-                        "gadget": "Gun",
-                        "name": "Thunderball2",
-                        "timeExpired": 15,
-                        "timeIssued": 6
+                        "serialAgentsNumbers": [
+                            "003",
+                            "002",
+                            "001"
+                        ],
+                        "duration": 4,
+                        "gadget": "Mission2Tool",
+                        "name": "Mission2",
+                        "timeExpired": 3,
+                        "timeIssued": 1
                     },
                     {
-                        "serialAgentsNumbers": ["007"],
-                        "duration": 10,
-                        "gadget": "Wep",
-                        "name": "Thunderball3",
-                        "timeExpired": 40,
-                        "timeIssued": 7
-                    },
-
-                    {
-                        "serialAgentsNumbers": ["009"],
-                        "duration": 10,
-                        "gadget": "Beer",
-                        "name": "Skyfall",
-                        "timeExpired": 45,
-                        "timeIssued": 40
-                    },
-                    {
-                        "serialAgentsNumbers": ["007","001"],
-                        "duration": 10,
-                        "gadget": "Dagger shoe",
-                        "name": "Goldfinger",
-                        "timeExpired": 60,
-                        "timeIssued": 20
-                    },
-                    {
-                        "serialAgentsNumbers": ["006"],
-                        "duration": 10,
-                        "gadget": "Dagger shoe1",
-                        "name": "The World Is Not Enough",
-                        "timeExpired": 60,
-                        "timeIssued": 20
-                    },
-                    {
-                        "serialAgentsNumbers": ["006"],
-                        "duration": 10,
-                        "gadget": "Wep1",
-                        "name": "Casino Royal",
+                        "serialAgentsNumbers": [
+                            "002",
+                            "001",
+                            "003"
+                        ],
+                        "duration": 4,
+                        "gadget": "Mission3Tool",
+                        "name": "Mission3",
                         "timeExpired": 100,
-                        "timeIssued": 70
+                        "timeIssued": 1
                     },
-
                     {
-                        "serialAgentsNumbers": ["007"],
-                        "duration": 2,
-                        "gadget": "Vodka",
-                        "name": "From Russia With Love",
-                        "timeExpired": 25,
-                        "timeIssued": 20
+                        "serialAgentsNumbers": [
+                            "002",
+                            "001",
+                            "003"
+                        ],
+                        "duration": 4,
+                        "gadget": "Mission1Tool",
+                        "name": "Mission4",
+                        "timeExpired": 100,
+                        "timeIssued": 1
+                    }
+                ]
+            },
+            {
+                "missions": [
+                    {
+                        "serialAgentsNumbers": [
+                            "003",
+                            "001",
+                            "002"
+                        ],
+                        "duration": 4,
+                        "gadget": "Mission5Tool",
+                        "name": "Mission5",
+                        "timeExpired": 5,
+                        "timeIssued": 1
+                    },
+                    {
+                        "serialAgentsNumbers": [
+                            "002"
+                        ],
+                        "duration": 4,
+                        "gadget": "Mission6Tool",
+                        "name": "Mission6",
+                        "timeExpired": 3,
+                        "timeIssued": 1
                     }
                 ]
             }
         ],
-        "time": 70
+        "time": 3
     },
     "squad": [
         {
-
-            "name": "James Bond",
-
-            "serialNumber": "007"
-
-        },
-        {
-
-            "name": "Daniel craig",
-            "serialNumber": "006"
-        },
-
-        {
-
-            "name": "sean connery",
+            "name": "AGENT001",
             "serialNumber": "001"
-
+        },
+        {
+            "name": "AGENT002",
+            "serialNumber": "002"
+        },
+        {
+            "name": "AGENT003",
+            "serialNumber": "003"
+        },
+        {
+            "name": "AGENT004",
+            "serialNumber": "004"
         }
+
     ]
+
 }

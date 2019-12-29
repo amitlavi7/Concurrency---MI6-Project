@@ -41,7 +41,7 @@ public class MI6Runner {
         List<Thread> threadsList = new LinkedList<>();
         Q q = new Q ();
         TimeService timeService = new TimeService(time);
-//        Executer exe = new Executer(mList.size());
+        Executer exe = new Executer(mList.size());
         for (M m : mList)
             threadsList.add(new Thread(m));
         for (Moneypenny moneypenny : moneypennies)
@@ -50,7 +50,7 @@ public class MI6Runner {
             threadsList.add(new Thread(intelligence));
         threadsList.add(new Thread(q));
         threadsList.add(new Thread(timeService));
-//        threadsList.add(new Thread(exe));
+        threadsList.add(new Thread(exe));
         for (Thread t : threadsList)
             t.start();
         for (Thread t : threadsList) {

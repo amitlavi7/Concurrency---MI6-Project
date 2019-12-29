@@ -47,7 +47,7 @@ public class Squad {
 		synchronized (this) { // dont think that we need to synchronize
 			if (serials == null){
 				for (String serial : agents.keySet()){
-					System.out.println("releasing agent " + agents.get(serial).getSerialNumber());
+					System.out.println("releasing agent because of null" + agents.get(serial).getSerialNumber());
 					agents.get(serial).release();
 					System.out.println("agent " + agents.get(serial).getSerialNumber() + " availability: " + agents.get(serial).isAvailable());
 				}

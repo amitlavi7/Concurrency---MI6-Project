@@ -4,7 +4,8 @@
     "Mission2Tool",
     "Mission3Tool-WillNotBeUsed",
     "Mission4Tool",
-    "Mission5Tool"
+    "Mission5Tool",
+    "Mission5Tool1"
   ],
   "services": {
     "M": 3,
@@ -52,6 +53,17 @@
             ],
             "duration": 5,
             "gadget": "Mission5Tool",
+            "name": "Mission5OrMission6Will2",
+            "timeExpired": 100,
+            "timeIssued": 7
+          },
+          {
+            "serialAgentsNumbers": [
+              "004",
+              "003"
+            ],
+            "duration": 5,
+            "gadget": "Mission5Tool1",
             "name": "Mission5OrMission6Will2",
             "timeExpired": 100,
             "timeIssued": 7
